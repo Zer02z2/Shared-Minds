@@ -1,8 +1,16 @@
-import { getElementPosition, Random } from "../library"
+import { getElementPosition, line, Random } from "../library"
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d")
 const input = document.getElementById("input-field") as HTMLInputElement
+
+interface Word {
+  occurrence: number
+  x: number
+  y: number
+}
+
+let dict: { [word: string]: Word } = {}
 
 const init = (): void => {
   if (!(ctx && input)) return
@@ -15,19 +23,32 @@ const init = (): void => {
 
   ctx.fillStyle = "black"
   ctx.font = "30px Helvetica"
-  ctx.fillText("test", 400, 400)
+
+  input.style.left = `${Random.integer(10, 90)}vw`
+  input.style.top = `${Random.integer(10, 90)}vh`
 
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       const value = input.value
-      const [x, y] = getElementPosition(input)
-      console.log(value, x, y)
-      ctx.fillText(value, x, y)
+      if (value === "") return
+
+      const lastValue = window.localStorage.getItem("lastValue")
+
+      if (!dict[value]) {
+        const [x, y] = getElementPosition(input)
+        dict[value] = { occurrence: 1, x: x, y: y }
+        ctx.fillText(value, x, y)
+
+        if (lastValue) {
+          line(ctx, dict[lastValue].x, dict[lastValue].y, x, y)
+        }
+      }
+      window.localStorage.setItem("lastValue", value)
+
       input.value = ""
 
-      const [x2, y2] = [Random.integer(10, 90), Random.integer(10, 90)]
-      input.style.left = `${x2}vw`
-      input.style.top = `${y2}vh`
+      input.style.left = `${Random.integer(10, 90)}vw`
+      input.style.top = `${Random.integer(10, 90)}vh`
     }
   })
 }
