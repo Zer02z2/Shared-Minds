@@ -1,2 +1,3 @@
-# shared-minds
- ITP Fall 2024 - Shared Minds class
+# Shared-Minds
+
+ITP Fall 2024 - Shared Minds classs
