@@ -1,0 +1,12 @@
+body {
+}
+
+#canvas {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+}
+
+#input-field {
+  position: absolute;
+}
