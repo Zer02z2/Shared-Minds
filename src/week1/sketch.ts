@@ -33,9 +33,14 @@ const init = (): void => {
       const value = input.value
       if (value === "") return
 
-      const words = value.split(/[\s,]+/)
+      const words = value.split(/(\s+|(?=\.)|(?<=\.)|\b)/).filter(Boolean)
 
       words.forEach((word) => {
+        if (word === ".") {
+          window.localStorage.removeItem("lastWord")
+          return
+        }
+
         const lastWord = window.localStorage.getItem("lastWord")
         if (!dict[word]) {
           const [x, y] = getElementPosition(input)
@@ -59,11 +64,10 @@ const init = (): void => {
         }
         window.localStorage.setItem("lastWord", word)
 
-        input.value = ""
-
         input.style.left = `${Random.integer(10, 90)}vw`
         input.style.top = `${Random.integer(10, 90)}vh`
       })
+      input.value = ""
     }
   })
 }
