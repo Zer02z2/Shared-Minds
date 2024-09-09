@@ -11,6 +11,7 @@ interface Word {
 }
 
 let dict: { [word: string]: Word } = {}
+window.localStorage.clear()
 
 const init = (): void => {
   if (!(ctx && input)) return
@@ -32,23 +33,37 @@ const init = (): void => {
       const value = input.value
       if (value === "") return
 
-      const lastValue = window.localStorage.getItem("lastValue")
+      const words = value.split(/[\s,]+/)
 
-      if (!dict[value]) {
-        const [x, y] = getElementPosition(input)
-        dict[value] = { occurrence: 1, x: x, y: y }
-        ctx.fillText(value, x, y)
+      words.forEach((word) => {
+        const lastWord = window.localStorage.getItem("lastWord")
+        if (!dict[word]) {
+          const [x, y] = getElementPosition(input)
+          dict[word] = { occurrence: 1, x: x, y: y }
+          ctx.fillText(word, x, y)
 
-        if (lastValue) {
-          line(ctx, dict[lastValue].x, dict[lastValue].y, x, y)
+          if (lastWord) {
+            line(ctx, dict[lastWord].x, dict[lastWord].y, x, y)
+          }
+        } else {
+          dict[word].occurrence++
+          if (lastWord) {
+            line(
+              ctx,
+              dict[lastWord].x,
+              dict[lastWord].y,
+              dict[word].x,
+              dict[word].y
+            )
+          }
         }
-      }
-      window.localStorage.setItem("lastValue", value)
+        window.localStorage.setItem("lastWord", word)
 
-      input.value = ""
+        input.value = ""
 
-      input.style.left = `${Random.integer(10, 90)}vw`
-      input.style.top = `${Random.integer(10, 90)}vh`
+        input.style.left = `${Random.integer(10, 90)}vw`
+        input.style.top = `${Random.integer(10, 90)}vh`
+      })
     }
   })
 }
