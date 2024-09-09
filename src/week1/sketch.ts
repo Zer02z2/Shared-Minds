@@ -1,17 +1,9 @@
-import { getElementPosition, line, Random } from "../library"
+import { getElementPosition, Random } from "../library"
+import { Paint } from "./paint"
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d")
 const input = document.getElementById("input-field") as HTMLInputElement
-
-interface Word {
-  occurrence: number
-  x: number
-  y: number
-}
-
-let dict: { [word: string]: Word } = {}
-window.localStorage.clear()
 
 const init = (): void => {
   if (!(ctx && input)) return
@@ -25,7 +17,8 @@ const init = (): void => {
   input.style.left = "2vw"
   input.style.top = "5vh"
   let [x, y] = getElementPosition(input)
-  console.log(x)
+
+  Paint.init()
 
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -34,41 +27,21 @@ const init = (): void => {
 
       words.forEach((word) => {
         if (word === ".") {
-          window.localStorage.removeItem("lastWord")
           x = Random.float(10, 50)
           y += 80
+          Paint.endSentence()
           return
         }
-
         if (!/[a-zA-Z]/.test(word)) return
 
-        const lastWord = window.localStorage.getItem("lastWord")
-        if (!dict[word]) {
-          const randomY = y + Random.float(-20, 20)
-          dict[word] = { occurrence: 1, x: x, y: randomY }
-
-          ctx.fillStyle = "black"
-          ctx.font = "30px Helvetica"
-          ctx.fillText(word, x, randomY)
-
-          if (lastWord) {
-            line(ctx, dict[lastWord].x, dict[lastWord].y, x, randomY)
-          }
-        } else {
-          dict[word].occurrence++
-          if (lastWord) {
-            line(
-              ctx,
-              dict[lastWord].x,
-              dict[lastWord].y,
-              dict[word].x,
-              dict[word].y
-            )
-          }
-        }
-        window.localStorage.setItem("lastWord", word)
+        const randomY = y + Random.float(-20, 20)
+        Paint.addWord(word, x, randomY)
         x += word.length * 30 + Random.float(20, 50)
       })
+      ctx.fillStyle = "black"
+      ctx.font = "30px Helvetica"
+      Paint.render(ctx)
+
       input.value = ""
       input.style.left = `${x}px`
       input.style.top = `${y}px`

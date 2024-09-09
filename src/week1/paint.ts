@@ -1,34 +1,41 @@
-// interface Word {
-//   occurrence: number
-//   x: number
-//   y: number
-// }
-
 import { line } from "../library"
 
 interface PaintProps {
   dict: { [word: string]: Word }
   sentences: Sentence[]
+  init: () => void
   addWord: (word: string, x: number, y: number) => void
-  addSentence: (sentence: string[]) => void
-  render: () => void
+  endSentence: () => void
+  render: (ctx: CanvasRenderingContext2D) => void
 }
 
 export const Paint: PaintProps = {
   dict: {},
   sentences: [],
+  init: () => {
+    let sentences = Paint.sentences
+    const emptySentece = new Sentence()
+    sentences = [...sentences, emptySentece]
+    console.log(sentences)
+  },
   addWord: (word, x, y) => {
-    if (!Paint.dict[word]) {
-      Paint.dict[word] = new Word(1, x, y)
+    const { dict, sentences } = Paint
+    if (!dict[word]) {
+      dict[word] = new Word(1, x, y)
     } else {
-      Paint.dict[word].occurrence++
+      dict[word].occurrence++
     }
+    console.log(sentences)
+    sentences[sentences.length - 1].addWord(word)
   },
-  addSentence: (sentence: string[]) => {
-    const newSentence = new Sentence(sentence)
-    Paint.sentences = [...Paint.sentences, newSentence]
+  endSentence: () => {
+    let { sentences } = Paint
+    const emptySentece = new Sentence()
+    sentences = [...sentences, emptySentece]
   },
-  render: () => {},
+  render: (ctx: CanvasRenderingContext2D) => {
+    Paint.sentences.forEach((sentence) => sentence.render(ctx, Paint.dict))
+  },
 }
 
 class Word {
@@ -46,15 +53,19 @@ class Word {
 class Sentence {
   sentence: string[]
 
-  constructor(sentence: string[]) {
-    this.sentence = sentence
+  constructor() {
+    this.sentence = []
+  }
+
+  addWord = (word: string) => {
+    this.sentence = [...this.sentence, word]
   }
 
   render = (ctx: CanvasRenderingContext2D, dict: PaintProps["dict"]) => {
     this.sentence.forEach((word, index) => {
+      ctx.fillText(word, dict[word].x, dict[word].y)
       const previousWord = index > 0 ? this.sentence[index - 1] : null
       if (!previousWord) return
-
       line(
         ctx,
         dict[previousWord].x,
