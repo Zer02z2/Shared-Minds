@@ -38,6 +38,8 @@ const init = (): void => {
         Paint.addWord(word, x, randomY)
         x += word.length * 30 + Random.float(20, 50)
       })
+      ctx.fillStyle = "rgba(150,150,150,0.9)"
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
       ctx.fillStyle = "black"
       ctx.font = "30px Helvetica"
       Paint.render(ctx)

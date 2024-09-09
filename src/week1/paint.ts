@@ -13,25 +13,20 @@ export const Paint: PaintProps = {
   dict: {},
   sentences: [],
   init: () => {
-    let sentences = Paint.sentences
     const emptySentece = new Sentence()
-    sentences = [...sentences, emptySentece]
-    console.log(sentences)
+    Paint.sentences = [...Paint.sentences, emptySentece]
   },
   addWord: (word, x, y) => {
-    const { dict, sentences } = Paint
-    if (!dict[word]) {
-      dict[word] = new Word(1, x, y)
+    if (!Paint.dict[word]) {
+      Paint.dict[word] = new Word(1, x, y)
     } else {
-      dict[word].occurrence++
+      Paint.dict[word].occurrence++
     }
-    console.log(sentences)
-    sentences[sentences.length - 1].addWord(word)
+    Paint.sentences[Paint.sentences.length - 1].addWord(word)
   },
   endSentence: () => {
-    let { sentences } = Paint
     const emptySentece = new Sentence()
-    sentences = [...sentences, emptySentece]
+    Paint.sentences = [...Paint.sentences, emptySentece]
   },
   render: (ctx: CanvasRenderingContext2D) => {
     Paint.sentences.forEach((sentence) => sentence.render(ctx, Paint.dict))
