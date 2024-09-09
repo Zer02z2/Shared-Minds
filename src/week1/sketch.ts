@@ -22,10 +22,6 @@ const init = (): void => {
   ctx.fillStyle = "rgba(150,150,150,0.9)"
   ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-  ctx.fillStyle = "black"
-  ctx.font = "30px Helvetica"
-
-  const range = 3
   input.style.left = "2vw"
   input.style.top = "5vh"
   let [x, y] = getElementPosition(input)
@@ -34,8 +30,6 @@ const init = (): void => {
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       const value = input.value
-      //   if (!/[a-zA-Z]/.test(value) && !value.indexOf(".")) return
-
       const words = value.split(/(\s+|(?=\.)|(?<=\.)|\b)/).filter(Boolean)
 
       words.forEach((word) => {
@@ -52,6 +46,9 @@ const init = (): void => {
         if (!dict[word]) {
           const randomY = y + Random.float(-20, 20)
           dict[word] = { occurrence: 1, x: x, y: randomY }
+
+          ctx.fillStyle = "black"
+          ctx.font = "30px Helvetica"
           ctx.fillText(word, x, randomY)
 
           if (lastWord) {
@@ -70,7 +67,6 @@ const init = (): void => {
           }
         }
         window.localStorage.setItem("lastWord", word)
-
         x += word.length * 30 + Random.float(20, 50)
       })
       input.value = ""

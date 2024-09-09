@@ -1,10 +1,12 @@
 body {
+  height: 100vh;
+  overflow: hidden;
 }
 
 #canvas {
   width: 100vw;
   height: 100vh;
-  position: absolute;
+  position: fixed;
 }
 
 #input-field {
