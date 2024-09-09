@@ -1,9 +1,9 @@
 export const Random = {
-  float: (min: number, max: number) => {
+  float: (min: number, max: number): number => {
     const delta = Math.random() * (max - min)
     return min + delta
   },
-  integer: (min: number, max: number) => {
+  integer: (min: number, max: number): number => {
     return Math.floor(Random.float(min, max))
   },
 }
