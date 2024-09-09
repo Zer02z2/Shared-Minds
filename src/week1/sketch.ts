@@ -48,9 +48,13 @@ const init = (): void => {
     }
   })
 
+  let lastHoverState: boolean = false
   document.addEventListener("mousemove", (event) => {
     const [mouseX, mouseY] = [event.clientX, event.clientY]
-    if (Paint.checkHover(mouseX, mouseY, fontSize)) render()
+
+    const hoverState = Paint.checkHover(mouseX, mouseY, fontSize)
+    if (hoverState != lastHoverState) render()
+    lastHoverState = hoverState
   })
 }
 

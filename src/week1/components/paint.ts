@@ -5,7 +5,7 @@ export interface PaintProps {
   dict: { [word: string]: Word }
   sentences: Sentence[]
   renderMode: "focus" | "blur"
-  styles: { dark: string; light: string }
+  styles: { focus: string; blur: string }
   init: () => void
   addWord: (word: string, x: number, y: number) => void
   endSentence: () => void
@@ -17,14 +17,14 @@ export const Paint: PaintProps = {
   dict: {},
   sentences: [],
   renderMode: "blur",
-  styles: { dark: "black", light: "gray" },
+  styles: { focus: "red", blur: "black" },
   init: () => {
     const emptySentece = new Sentence()
     Paint.sentences = [...Paint.sentences, emptySentece]
   },
   addWord: (word, x, y) => {
     if (!Paint.dict[word]) {
-      Paint.dict[word] = new Word(1, x, y, word.length)
+      Paint.dict[word] = new Word(word, 1, x, y, word.length, Paint.styles.blur)
     } else {
       Paint.dict[word].occurrence++
     }
@@ -63,5 +63,8 @@ export const Paint: PaintProps = {
         styles: Paint.styles,
       })
     })
+    for (const key in Paint.dict) {
+      Paint.dict[key].render(ctx)
+    }
   },
 }

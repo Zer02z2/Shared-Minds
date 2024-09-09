@@ -1,7 +1,7 @@
 import { PaintProps } from "./paint"
 import { line } from "../../library"
 
-interface RenderProps {
+export interface RenderProps {
   ctx: CanvasRenderingContext2D
   dict: PaintProps["dict"]
   mode: PaintProps["renderMode"]
@@ -20,17 +20,14 @@ export class Sentence {
   }
 
   render = ({ ctx, dict, mode, styles }: RenderProps) => {
-    if (mode === "blur") {
-      ctx.fillStyle = styles.dark
-    } else {
-      if (this.sentence.find((key) => dict[key].hoverState === true)) {
-        ctx.fillStyle = styles.dark
-      } else {
-        ctx.fillStyle = "gray"
-      }
-    }
+    const containHover = this.sentence.find(
+      (key) => dict[key].hoverState === true
+    )
+    const renderStyle = containHover ? styles.focus : styles.blur
+
     this.sentence.forEach((word, index) => {
-      ctx.fillText(word, dict[word].x, dict[word].y)
+      dict[word].style = renderStyle
+      ctx.fillStyle = renderStyle
       const previousWord = index > 0 ? this.sentence[index - 1] : null
       if (!previousWord) return
       line(
