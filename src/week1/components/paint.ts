@@ -4,7 +4,6 @@ import { Sentence } from "./sentence"
 export interface PaintProps {
   dict: { [word: string]: Word }
   sentences: Sentence[]
-  renderMode: "focus" | "blur"
   styles: { focus: string; blur: string }
   init: () => void
   addWord: (word: string, x: number, y: number) => void
@@ -16,7 +15,6 @@ export interface PaintProps {
 export const Paint: PaintProps = {
   dict: {},
   sentences: [],
-  renderMode: "blur",
   styles: { focus: "red", blur: "black" },
   init: () => {
     const emptySentece = new Sentence()
@@ -46,20 +44,20 @@ export const Paint: PaintProps = {
     })
     if (!hoveredWord) {
       keyArray.forEach((key) => (Paint.dict[key].hoverState = false))
-      Paint.renderMode = "blur"
       return false
     } else {
       Paint.dict[hoveredWord].hoverState = true
-      Paint.renderMode = "focus"
       return true
     }
   },
   render: (ctx: CanvasRenderingContext2D) => {
+    for (const key in Paint.dict) {
+      Paint.dict[key].style = Paint.styles.blur
+    }
     Paint.sentences.forEach((sentence) => {
       sentence.render({
         ctx: ctx,
         dict: Paint.dict,
-        mode: Paint.renderMode,
         styles: Paint.styles,
       })
     })

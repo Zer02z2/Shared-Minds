@@ -4,7 +4,6 @@ import { line } from "../../library"
 export interface RenderProps {
   ctx: CanvasRenderingContext2D
   dict: PaintProps["dict"]
-  mode: PaintProps["renderMode"]
   styles: PaintProps["styles"]
 }
 
@@ -19,15 +18,14 @@ export class Sentence {
     this.sentence = [...this.sentence, word]
   }
 
-  render = ({ ctx, dict, mode, styles }: RenderProps) => {
-    const containHover = this.sentence.find(
+  render = ({ ctx, dict, styles }: RenderProps) => {
+    const hoveredWord = this.sentence.find(
       (key) => dict[key].hoverState === true
     )
-    const renderStyle = containHover ? styles.focus : styles.blur
-    ctx.strokeStyle = renderStyle
+    ctx.strokeStyle = hoveredWord ? styles.focus : styles.blur
 
     this.sentence.forEach((word, index) => {
-      dict[word].style = renderStyle
+      if (hoveredWord) dict[word].style = styles.focus
       const previousWord = index > 0 ? this.sentence[index - 1] : null
       if (!previousWord) return
       line(
