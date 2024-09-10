@@ -1,0 +1,1 @@
+body{height:100vh;overflow:hidden;font-family:Helvetica}#canvas{width:100vw;height:100vh;position:fixed}#input-container{position:absolute;left:2vw;top:5vh}#input-field{border:none;border-bottom:solid 1px black;background:none;font-size:24px;padding:.5rem .2rem}#input-field:focus{outline:none}p{font-size:14px}
