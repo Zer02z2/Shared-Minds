@@ -24,10 +24,10 @@ export class Sentence {
       (key) => dict[key].hoverState === true
     )
     const renderStyle = containHover ? styles.focus : styles.blur
+    ctx.strokeStyle = renderStyle
 
     this.sentence.forEach((word, index) => {
       dict[word].style = renderStyle
-      ctx.fillStyle = renderStyle
       const previousWord = index > 0 ? this.sentence[index - 1] : null
       if (!previousWord) return
       line(
