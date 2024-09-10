@@ -21,6 +21,7 @@ export const Paint: PaintProps = {
     Paint.sentences = [...Paint.sentences, emptySentece]
   },
   addWord: (word, x, y) => {
+    word = word.toLocaleLowerCase()
     if (!Paint.dict[word]) {
       Paint.dict[word] = new Word(word, 1, x, y, word.length, Paint.styles.blur)
     } else {

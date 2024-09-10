@@ -1,6 +1,7 @@
 body {
   height: 100vh;
   overflow: hidden;
+  font-family: Helvetica;
 }
 
 #canvas {
@@ -9,16 +10,23 @@ body {
   position: fixed;
 }
 
-#input-field {
+#input-container {
   position: absolute;
   left: 2vw;
   top: 5vh;
+}
+
+#input-field {
   border: none;
-  border-radius: 5px;
+  border-bottom: solid 1px black;
+  background: none;
   font-size: 24px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.2rem;
 }
 #input-field:focus {
   outline: none;
-  box-shadow: 0px 5px 20px grey;
+}
+
+p {
+  font-size: 14px;
 }

@@ -3,6 +3,7 @@ import { Paint } from "./components/paint"
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d")
+const inputContainer = document.getElementById("input-container") as HTMLElement
 const input = document.getElementById("input-field") as HTMLInputElement
 
 const init = (): void => {
@@ -10,7 +11,7 @@ const init = (): void => {
 
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
-  let [inputX, inputY] = getElementPosition(input)
+  let [inputX, inputY] = getElementPosition(inputContainer)
   const fontSize = 30
 
   const render = (): void => {
@@ -43,8 +44,8 @@ const init = (): void => {
       render()
 
       input.value = ""
-      input.style.left = `${inputX}px`
-      input.style.top = `${inputY}px`
+      inputContainer.style.left = `${inputX}px`
+      inputContainer.style.top = `${inputY}px`
     }
   })
 
