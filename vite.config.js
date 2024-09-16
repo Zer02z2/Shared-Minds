@@ -13,7 +13,8 @@ export default {
       input: {
         main: "/index.html",
         week1: "/week1/index.html",
+        week2: "/week2/index.html",
       },
     },
   },
-};
+}
