@@ -1,0 +1,35 @@
+body {
+  height: 100vh;
+  overflow: hidden;
+  font-family: Helvetica;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+#canvas {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+}
+
+#input-container {
+  padding-bottom: 5rem;
+  z-index: 99;
+}
+
+#input-field {
+  border: solid 1px black;
+  border-radius: 5rem;
+  background-color: white;
+  font-size: 24px;
+  width: 25rem;
+  padding: 1rem 2rem;
+}
+#input-field:focus {
+  outline: none;
+}
+
+p {
+  font-size: 14px;
+}
