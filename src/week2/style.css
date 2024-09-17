@@ -23,14 +23,20 @@ body {
   margin-bottom: 1rem;
 }
 .column {
-  height: 100%;
   border-radius: 1rem;
+  padding: 1rem 3rem;
+  overflow-y: auto;
 }
 #left-column {
   background-color: #2e2e2e;
 }
 #right-column {
   background-color: #363636;
+}
+
+.column p {
+  font-size: 1rem;
+  color: white;
 }
 
 #input-container {

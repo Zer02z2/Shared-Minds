@@ -26,3 +26,21 @@ export const line = (
   ctx.lineTo(x2, y2)
   ctx.stroke()
 }
+
+export const HTMLText: {
+  create: (tag: string, content?: string) => HTMLElement
+  append: (target: HTMLElement, content: string) => void
+} = {
+  create: (tag, content) => {
+    const element = document.createElement(tag)
+    if (content) {
+      const textNode = document.createTextNode(content)
+      element.appendChild(textNode)
+    }
+    return element
+  },
+  append: (target, content) => {
+    const textNode = document.createTextNode(content)
+    target.appendChild(textNode)
+  },
+}
