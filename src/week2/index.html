@@ -8,10 +8,15 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <canvas id="canvas"></canvas>
-    <div id="input-container">
-      <input type="text" id="input-field" placeholder="type" />
-    </div>
+    <section class="inner-wrap">
+      <div class="column-wrap">
+        <div id="left-column" class="column"></div>
+        <div id="right-column" class="column"></div>
+      </div>
+      <div id="input-container">
+        <input type="text" id="input-field" placeholder="type" />
+      </div>
+    </section>
     <script type="module" src="sketch.ts"></script>
   </body>
 </html>
