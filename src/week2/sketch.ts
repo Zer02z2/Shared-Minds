@@ -4,6 +4,10 @@ import { secrets } from "../secrets"
 const input = document.getElementById("input-field") as HTMLInputElement
 const myWordsBox = document.getElementById("left-column")
 const aiWordsBox = document.getElementById("ai-words")
+const prompt1 =
+  "Generate four words that are closely associated with the following words or sentences. Add a + sign at the beginning and end of your response: "
+const prompt2 =
+  "Rearrange the following words or sentences to make them coherent together. Avoid adding new words, but you can add new words if the sentence is not complete. Changes should be minimal, and try not to change the overall meaning. Add a + sign at the beginning and end of your response: "
 
 const init = () => {
   let dict: { [name: string]: string }
@@ -33,7 +37,7 @@ const init = () => {
 }
 
 const fetchData = async (input: string) => {
-  const prompt = `Rearrange the following words or sentences to make them coherent together. Avoid adding new words, but you can add new words if the sentence is not complete. Changes should be minimal, and try not to change the overall meaning. Add a + sign at the beginning and end of your response: ${input}`
+  const prompt = prompt1 + input
   const data = {
     version: "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
     input: {
