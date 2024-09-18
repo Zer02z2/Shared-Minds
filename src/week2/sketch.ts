@@ -14,9 +14,10 @@ const init = () => {
     return
   }
 
-  trashCan?.addEventListener("click", () => {
+  trashCan.addEventListener("click", () => {
     location.reload()
   })
+
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       const values = input.value.split(/\s/).filter(Boolean)
