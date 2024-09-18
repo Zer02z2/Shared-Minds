@@ -55,6 +55,8 @@ p {
 
 #input-container {
   z-index: 99;
+  display: flex;
+  align-items: center;
 }
 
 #input-field {
@@ -72,4 +74,21 @@ p {
 .recorded {
   font-size: 20px;
   background-color: #e1ffbd;
+}
+
+h1 {
+  margin-bottom: 0.6rem;
+}
+.placeholder {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgb(180, 180, 180);
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+#trash {
+  height: 2rem;
+  margin-left: 2rem;
+  cursor: pointer;
 }
