@@ -2,15 +2,11 @@ import { HTMLText } from "../library"
 import { secrets } from "../secrets"
 
 const input = document.getElementById("input-field") as HTMLInputElement
-const myWordsBox = document.getElementById("left-column")
+const myWordsBox = document.getElementById("my-words")
 const aiWordsBox = document.getElementById("ai-words")
-const prompt1 =
-  "Generate four words that are closely associated with the following words or sentences. Add a + sign at the beginning and end of your response: "
-const prompt2 =
-  "Rearrange the following words or sentences to make them coherent together. Avoid adding new words, but you can add new words if the sentence is not complete. Changes should be minimal, and try not to change the overall meaning. Add a + sign at the beginning and end of your response: "
 
 const init = () => {
-  let dict: { [name: string]: string }
+  let dict: string[] = []
   let history: string = ""
   if (!(input && myWordsBox && aiWordsBox)) {
     console.error("Counldn't load all elements")
@@ -19,17 +15,34 @@ const init = () => {
 
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-      const value = input.value.split(/\s/).filter(Boolean)
+      const values = input.value.split(/\s/).filter(Boolean)
       input.value = ""
-      if (value.length === 0) return
+      if (values.length === 0) return
+      values.forEach((value) => {
+        const word = value.replace(/[^a-zA-Z]/g, "")
+        if (dict.includes(word)) return
+        else dict = [...dict, word]
+      })
+      console.log(dict)
 
-      history += ` ${value.join(" ")}`
-      const newLine = HTMLText.create("p", value.join(" "))
+      history += ` ${values.join(" ")}`
+      const newLine = HTMLText.create("p", values.join(" "))
       myWordsBox.appendChild(newLine)
 
       const update = async () => {
         history = await fetchData(history)
-        aiWordsBox.innerHTML = history
+        const aiWordsArr = history.split(" ")
+
+        while (aiWordsBox.lastChild) {
+          aiWordsBox.removeChild(aiWordsBox.lastChild)
+        }
+
+        aiWordsArr.forEach((word) => {
+          const testWord = word.replace(/[^a-zA-Z]/g, "")
+          const className = dict.includes(testWord) ? "recorded" : "unrecorded"
+          const span = HTMLText.create("span", `${word} `, className)
+          aiWordsBox.appendChild(span)
+        })
       }
       update()
     }
@@ -37,7 +50,7 @@ const init = () => {
 }
 
 const fetchData = async (input: string) => {
-  const prompt = prompt1 + input
+  const prompt = `Rearrange the following words or sentences to make them coherent together. Make sure your response is in complete sentence or sentences. Avoid adding new words, but you can add new words if the sentence is not complete. Changes should be minimal, and try not to change the overall meaning. Add a + sign at the beginning and end of your response: ${input}`
   const data = {
     version: "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
     input: {

@@ -28,14 +28,17 @@ export const line = (
 }
 
 export const HTMLText: {
-  create: (tag: string, content?: string) => HTMLElement
+  create: (tag: string, content?: string, clasName?: string) => HTMLElement
   append: (target: HTMLElement, content: string) => void
 } = {
-  create: (tag, content) => {
+  create: (tag, content, className) => {
     const element = document.createElement(tag)
     if (content) {
       const textNode = document.createTextNode(content)
       element.appendChild(textNode)
+    }
+    if (className) {
+      element.classList.add(className)
     }
     return element
   },
