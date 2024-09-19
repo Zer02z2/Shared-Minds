@@ -49,7 +49,7 @@ const fetchData = async (input: string): Promise<string> => {
   ]
   const randomPrompt =
     promptOptions[Random.integer(0, promptOptions.length - 1)]
-  const prompt = `Read the following story and expand upon it in one or two sentences. Make it short. Make sure the logic of the story is smooth. The plot should be ${randomPrompt}. Add a + sign at the beginning and end of your response: ${input}`
+  const prompt = `Read the following story and expand upon it in one or two sentences. Your response should be no longer than 20 words. Make sure the logic of the story is smooth. The plot should be ${randomPrompt}. Add a + sign at the beginning and end of your response: ${input}`
   const data = {
     version: "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
     input: {
