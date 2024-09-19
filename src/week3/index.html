@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zongze Week2</title>
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section class="inner-wrap">
+      <div class="column-wrap">
+        <div id="left-column" class="column">
+          <h1>Thought</h1>
+          <h2 class="placeholder">Jot down something...</h2>
+          <div id="my-words"></div>
+        </div>
+        <div id="right-column" class="column">
+          <h1>Glue</h1>
+          <h2 class="placeholder">and I will glue them for you.</h2>
+          <p id="ai-words"></p>
+        </div>
+      </div>
+      <div id="input-container">
+        <input type="text" id="input-field" placeholder="type" />
+        <img id="trash" src="./trash.svg" />
+      </div>
+    </section>
+    <script type="module" src="sketch.ts"></script>
+  </body>
+</html>

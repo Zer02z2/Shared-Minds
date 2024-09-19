@@ -14,6 +14,7 @@ export default {
         main: "/index.html",
         week1: "/week1/index.html",
         week2: "/week2/index.html",
+        week3: "/week3/index.html",
       },
     },
   },
