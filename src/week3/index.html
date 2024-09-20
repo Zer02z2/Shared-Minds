@@ -11,19 +11,21 @@
     <section class="inner-wrap">
       <div class="column-wrap">
         <div id="left-column" class="column">
-          <h1>Thought</h1>
-          <h2 class="placeholder">Jot down something...</h2>
-          <div id="my-words"></div>
+          <div id="image-container"></div>
         </div>
         <div id="right-column" class="column">
-          <h1>Glue</h1>
-          <h2 class="placeholder">and I will glue them for you.</h2>
-          <p id="ai-words"></p>
+          <div class="intro">
+            <h1>Story</h1>
+            <h2>Who knows what will happen next...</h2>
+          </div>
+          <div class="story-container">
+            <p id="story"></p>
+          </div>
+          <div id="input-container">
+            <textarea id="input-field" rows="3" placeholder="type"></textarea>
+            <img id="trash" src="./trash.svg" />
+          </div>
         </div>
-      </div>
-      <div id="input-container">
-        <input type="text" id="input-field" placeholder="type" />
-        <img id="trash" src="./trash.svg" />
       </div>
     </section>
     <script type="module" src="sketch.ts"></script>

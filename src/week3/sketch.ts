@@ -1,14 +1,13 @@
 import { HTMLText, Random } from "../library"
 import { secrets } from "../secrets"
 
-const input = document.getElementById("input-field") as HTMLInputElement
-const myWordsBox = document.getElementById("my-words")
-const aiWordsBox = document.getElementById("ai-words")
+const input = document.getElementById("input-field") as HTMLTextAreaElement
+const story = document.getElementById("story")
 const trashCan = document.getElementById("trash")
 
 const init = () => {
   let history: string = ""
-  if (!(input && myWordsBox && aiWordsBox && trashCan)) {
+  if (!(input && story && trashCan)) {
     console.error("Counldn't load all elements")
     return
   }
@@ -20,17 +19,19 @@ const init = () => {
   input.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return
     const values = input.value
+    event.preventDefault()
     input.value = ""
     if (values.length === 0) return
 
     history += values
-    myWordsBox.appendChild(HTMLText.create("p", values))
-    aiWordsBox.appendChild(HTMLText.create("p", values))
+    story.appendChild(HTMLText.create("p", values, "my-story"))
+    story.scrollTop = story.scrollHeight
 
     const update = async () => {
       const newStory = await fetchData(history)
-      const span = HTMLText.create("span", ` ${newStory}`)
-      aiWordsBox.appendChild(span)
+      const span = HTMLText.create("span", ` ${newStory}`, "story-block")
+      story.appendChild(span)
+      story.scrollTop = story.scrollHeight
       history += newStory
     }
     update()
