@@ -26,18 +26,24 @@ const init = () => {
     input.value = ""
 
     history += values
-    story.appendChild(HTMLText.create("p", values, "my-story"))
-    story.scrollTop = story.scrollHeight
+    const paragraph = HTMLText.create("p", values, "my-story")
+    appendToStory(paragraph)
 
     update(history)
   })
 
+  const appendToStory = (e: HTMLElement) => {
+    story.appendChild(e)
+    if (story.scrollHeight > story.clientHeight) {
+      story.scrollTo({ top: story.scrollHeight, behavior: "smooth" })
+    }
+  }
+
   const update = async (input: string) => {
     const newStory = await fetchData(storyPrompt(input))
     getOptions(newStory)
-    const span = HTMLText.create("span", ` ${newStory}`, "story-block")
-    story.appendChild(span)
-    story.scrollTop = story.scrollHeight
+    const paragraph = HTMLText.create("p", ` ${newStory}`, "story-block")
+    appendToStory(paragraph)
     history += newStory
   }
 
@@ -51,17 +57,19 @@ const init = () => {
       Array.from({ length: 3 }).map(() => getShortChoice())
     )
     options.forEach((option) => {
-      const span = HTMLText.create("p", `${option.shortChoice}`, "option")
-      span.addEventListener("click", () => {
+      const choice = HTMLText.create("p", `${option.shortChoice}`, "option")
+      choice.addEventListener("click", () => {
         history += option.fullChoice
-        story.appendChild(
-          HTMLText.create("p", `${option.fullChoice}`, "my-story")
+        const paragraph = HTMLText.create(
+          "p",
+          `${option.fullChoice}`,
+          "my-story"
         )
-        story.scrollTop = story.scrollHeight
+        appendToStory(paragraph)
         removeChildren(optionContainer)
         update(history)
       })
-      optionContainer.appendChild(span)
+      optionContainer.appendChild(choice)
     })
   }
 }
