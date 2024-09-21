@@ -4,12 +4,13 @@ import { choicePrompt, data, initialPrompt, storyPrompt } from "./prompts"
 
 const input = document.getElementById("input-field") as HTMLTextAreaElement
 const story = document.getElementById("story")
-const optionContainer = document.getElementById("option-container")
+const optionContainer = document.getElementById("option")
 const trashCan = document.getElementById("trash")
+const loader = document.getElementById("loader")
 
 const init = () => {
   let fullStory: string = ""
-  if (!(input && story && optionContainer && trashCan)) {
+  if (!(input && story && optionContainer && trashCan && loader)) {
     console.error("Counldn't load all elements")
     return
   }
@@ -40,6 +41,8 @@ const init = () => {
   }
 
   const update = async (input: string) => {
+    removeChildren(optionContainer)
+    loader.style.display = "block"
     const newParagraph = await fetchData(storyPrompt(input))
     getOptions(newParagraph, { mode: "update" })
     const paragraph = HTMLText.create("p", ` ${newParagraph}`, "story-block")
@@ -60,6 +63,7 @@ const init = () => {
     const options = await Promise.all(
       Array.from({ length: 3 }).map(() => getShortChoice())
     )
+    loader.style.display = "none"
     options.forEach((option) => {
       const choice = HTMLText.create("p", `${option.shortChoice}`, "option")
       choice.addEventListener("click", () => {
@@ -70,7 +74,6 @@ const init = () => {
           "my-story"
         )
         appendToStory(paragraph)
-        removeChildren(optionContainer)
         update(fullStory)
       })
       optionContainer.appendChild(choice)
