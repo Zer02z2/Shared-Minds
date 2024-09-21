@@ -15,6 +15,8 @@ export const storyPrompt = (input: string): data => {
     "romantic",
     "sarcasm",
     "suspenful",
+    "mysterious",
+    "tedious",
   ]
   const randomOption =
     promptOptions[Random.integer(0, promptOptions.length - 1)]
@@ -62,14 +64,16 @@ export const initialPrompt = (): data => {
     "peaceful",
     "romantic",
   ]
-  const [number, character, condition, setting, tone] = [
+  const perspectives = ["first-person", "third-person"]
+  const [number, character, condition, setting, tone, perspective] = [
     numbers,
     characters,
     conditions,
     settings,
     tones,
+    perspectives,
   ].map((arr) => arr[Random.integer(0, arr.length - 1)])
-  const prompt = `Write one sentence to describe ${number} ${character} ${condition}. The setting should ${setting} and the tone should be ${tone}. Add a + sign at the beginning and end of your response.`
+  const prompt = `Write one sentence in ${perspective} point of view to describe ${number} ${character} ${condition}. The setting should ${setting} and the tone should be ${tone}. The sentence should be no longer than 15 words. Add a + sign at the beginning and end of your response.`
   return {
     version: "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
     input: {
