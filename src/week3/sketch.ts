@@ -97,7 +97,13 @@ const init = () => {
     })
   }
   const getImage = async () => {
-    fetchData(imagePrompt("random"))
+    const src = await fetchData(imagePrompt("random"))
+    const img = HTMLElement.createImage(
+      src,
+      "AI generated image.",
+      "story-image"
+    )
+    imageContainer.appendChild(img)
   }
   getImage()
   getOptions("", { mode: "init" })

@@ -29,6 +29,11 @@ export const line = (
 
 export const HTMLElement: {
   createText: (tag: string, content?: string, clasName?: string) => HTMLElement
+  createImage: (
+    src: string,
+    alt: string,
+    className?: string
+  ) => HTMLImageElement
 } = {
   createText: (tag, content, className) => {
     const element = document.createElement(tag)
@@ -40,6 +45,13 @@ export const HTMLElement: {
       element.classList.add(className)
     }
     return element
+  },
+  createImage: (src, alt, className) => {
+    const img = document.createElement("img")
+    img.src = src
+    img.alt = alt
+    if (className) img.classList.add(className)
+    return img
   },
 }
 
