@@ -28,12 +28,20 @@ body {
 }
 .column {
   border-radius: 1rem;
-  padding: 1rem 3rem;
+  padding: 2rem 3rem;
   overflow-y: auto;
   background-color: var(--column-background);
   /* height: 100%; */
 }
 #left-column {
+  padding: 2rem;
+}
+#image-container {
+  border-radius: 1rem;
+  border: solid 1px red;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 #right-column {
   display: grid;
@@ -44,6 +52,7 @@ body {
 }
 .intro {
   & h1 {
+    margin: 0;
     color: var(--text-primary);
     margin-bottom: 1rem;
   }
@@ -97,7 +106,7 @@ body {
   z-index: 99;
   display: flex;
   align-items: center;
-  padding: 1rem 0rem;
+  padding-top: 1rem;
 }
 #input-field {
   border: solid 1px var(--text-secondary);

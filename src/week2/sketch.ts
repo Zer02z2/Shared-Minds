@@ -1,4 +1,4 @@
-import { HTMLText } from "../library"
+import { HTMLElement, removeChildren } from "../library"
 import { secrets } from "../secrets"
 
 const input = document.getElementById("input-field") as HTMLInputElement
@@ -30,21 +30,17 @@ const init = () => {
       })
 
       history += ` ${values.join(" ")}`
-      const newLine = HTMLText.create("p", values.join(" "))
+      const newLine = HTMLElement.createText("p", values.join(" "))
       myWordsBox.appendChild(newLine)
 
       const update = async () => {
         history = await fetchData(history)
+        removeChildren(aiWordsBox)
         const aiWordsArr = history.split(" ")
-
-        while (aiWordsBox.lastChild) {
-          aiWordsBox.removeChild(aiWordsBox.lastChild)
-        }
-
         aiWordsArr.forEach((word) => {
           const testWord = word.replace(/[^a-zA-Z]/g, "").toLocaleLowerCase()
           const className = dict.includes(testWord) ? "recorded" : "unrecorded"
-          const span = HTMLText.create("span", `${word} `, className)
+          const span = HTMLElement.createText("span", `${word} `, className)
           aiWordsBox.appendChild(span)
         })
       }

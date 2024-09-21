@@ -27,10 +27,10 @@ export const line = (
   ctx.stroke()
 }
 
-export const HTMLText: {
-  create: (tag: string, content?: string, clasName?: string) => HTMLElement
+export const HTMLElement: {
+  createText: (tag: string, content?: string, clasName?: string) => HTMLElement
 } = {
-  create: (tag, content, className) => {
+  createText: (tag, content, className) => {
     const element = document.createElement(tag)
     if (content) {
       const textNode = document.createTextNode(content)
