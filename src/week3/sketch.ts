@@ -1,5 +1,6 @@
-import { HTMLText, Random } from "../library"
+import { HTMLText } from "../library"
 import { secrets } from "../secrets"
+import { choicePrompt, data, storyPrompt } from "./prompts"
 
 const input = document.getElementById("input-field") as HTMLTextAreaElement
 const story = document.getElementById("story")
@@ -18,45 +19,41 @@ const init = () => {
 
   input.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return
+    if (input.value.length === 0) return
     const values = input.value
     event.preventDefault()
     input.value = ""
-    if (values.length === 0) return
 
     history += values
     story.appendChild(HTMLText.create("p", values, "my-story"))
     story.scrollTop = story.scrollHeight
 
     const update = async () => {
-      const newStory = await fetchData(history)
+      const newStory = await fetchData(storyPrompt(history))
+      getOptions(newStory)
       const span = HTMLText.create("span", ` ${newStory}`, "story-block")
       story.appendChild(span)
       story.scrollTop = story.scrollHeight
       history += newStory
     }
+    const getOptions = async (story: string) => {
+      const getShortChoice = async () => {
+        const fullChoice = await fetchData(storyPrompt(story))
+        const shortChoice = await fetchData(choicePrompt(fullChoice))
+        return { fullChoice: fullChoice, shortChoice: shortChoice }
+      }
+      const [option1, option2, option3] = await Promise.all([
+        getShortChoice(),
+        getShortChoice(),
+        getShortChoice(),
+      ])
+      console.log(option1, option2, option3)
+    }
     update()
   })
 }
 
-const fetchData = async (input: string): Promise<string> => {
-  const promptOptions = [
-    "twisting",
-    "surprising",
-    "peaceful",
-    "exciting",
-    "humorous",
-    "lovely",
-    "suspenful",
-  ]
-  const randomPrompt =
-    promptOptions[Random.integer(0, promptOptions.length - 1)]
-  const prompt = `Read the following story and expand upon it in one or two sentences. Your response should be no longer than 20 words. Make sure the logic of the story is smooth. The plot should be ${randomPrompt}. Add a + sign at the beginning and end of your response: ${input}`
-  const data = {
-    version: "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
-    input: {
-      prompt: prompt,
-    },
-  }
+const fetchData = async (data: data): Promise<string> => {
   const options = {
     method: "POST",
     headers: {
