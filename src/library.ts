@@ -29,7 +29,6 @@ export const line = (
 
 export const HTMLText: {
   create: (tag: string, content?: string, clasName?: string) => HTMLElement
-  append: (target: HTMLElement, content: string) => void
 } = {
   create: (tag, content, className) => {
     const element = document.createElement(tag)
@@ -42,8 +41,10 @@ export const HTMLText: {
     }
     return element
   },
-  append: (target, content) => {
-    const textNode = document.createTextNode(content)
-    target.appendChild(textNode)
-  },
+}
+
+export const removeChildren = (e: HTMLElement): void => {
+  while (e.lastChild) {
+    e.removeChild(e.lastChild)
+  }
 }

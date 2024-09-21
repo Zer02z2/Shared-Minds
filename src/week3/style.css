@@ -1,8 +1,17 @@
+:root {
+  --white-1: #b4b4b4;
+  --white-2: #969696;
+  --black-1: #121313;
+  --gray-1: #1b1d1d;
+  --gray-2: #212424;
+  --gray-3: #2e302f;
+}
+
 body {
   font-family: Helvetica;
   display: flex;
   justify-content: center;
-  background-color: #121313;
+  background-color: var(--black-1);
 }
 .inner-wrap {
   width: 100%;
@@ -21,21 +30,21 @@ body {
   border-radius: 1rem;
   padding: 1rem 3rem;
   overflow-y: auto;
-  background-color: #1b1d1d;
+  background-color: var(--gray-1);
   /* height: 100%; */
 }
 #left-column {
 }
 #right-column {
   display: grid;
-  grid-template-rows: 1fr 6fr 1fr;
+  grid-template-rows: 1fr 6fr 2fr 1fr;
   & p {
     line-height: 1.6rem;
   }
 }
 .intro {
   & h1 {
-    color: rgb(180, 180, 180);
+    color: var(--white-1);
     margin-bottom: 0.6rem;
   }
   & h2 {
@@ -55,17 +64,32 @@ body {
   width: calc(100% + 18px);
   height: calc(100% - 4rem);
   overflow-y: scroll;
-  color: white;
+  color: var(--white-1);
 }
 .story-block {
   width: 90%;
   padding: 1rem 1rem;
   display: block;
   border-radius: 0.8rem;
-  background-color: #212424;
+  background-color: var(--gray-2);
 }
 .my-story {
   padding: 0rem 1rem;
+}
+#option-container {
+}
+.option {
+  color: var(--white-2);
+  border: solid 1px var(--white-2);
+  display: inline-block;
+  margin: 0.5rem;
+  padding: 0.3rem 1rem;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+.option:hover {
+  background-color: var(--white-2);
+  color: var(--gray-1);
 }
 #input-container {
   z-index: 99;
@@ -76,13 +100,13 @@ body {
 #input-field {
   border: none;
   border-radius: 0.8rem;
-  background-color: rgb(46, 48, 47);
+  background-color: var(--gray-3);
   font-size: 16px;
   width: 100%;
   padding: 1.4rem 1.4rem;
   resize: none;
   font-family: Helvetica;
-  color: white;
+  color: var(--white-1);
 }
 #input-field:focus {
   outline: none;
