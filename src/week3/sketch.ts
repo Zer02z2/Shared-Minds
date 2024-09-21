@@ -1,6 +1,6 @@
 import { HTMLText, removeChildren } from "../library"
 import { secrets } from "../secrets"
-import { choicePrompt, data, storyPrompt } from "./prompts"
+import { choicePrompt, data, initialPrompt, storyPrompt } from "./prompts"
 
 const input = document.getElementById("input-field") as HTMLTextAreaElement
 const story = document.getElementById("story")
@@ -41,15 +41,19 @@ const init = () => {
 
   const update = async (input: string) => {
     const newParagraph = await fetchData(storyPrompt(input))
-    getOptions(newParagraph)
+    getOptions(newParagraph, { mode: "update" })
     const paragraph = HTMLText.create("p", ` ${newParagraph}`, "story-block")
     appendToStory(paragraph)
     fullStory += newParagraph
   }
 
-  const getOptions = async (input: string) => {
+  const getOptions = async (
+    input: string,
+    params: { mode: "init" | "update" }
+  ) => {
     const getShortChoice = async () => {
-      const fullChoice = await fetchData(storyPrompt(input))
+      const data = params.mode === "init" ? initialPrompt() : storyPrompt(input)
+      const fullChoice = await fetchData(data)
       const shortChoice = await fetchData(choicePrompt(fullChoice))
       return { fullChoice: fullChoice, shortChoice: shortChoice }
     }
@@ -72,6 +76,7 @@ const init = () => {
       optionContainer.appendChild(choice)
     })
   }
+  getOptions("", { mode: "init" })
 }
 
 const fetchData = async (data: data): Promise<string> => {
@@ -83,19 +88,19 @@ const fetchData = async (data: data): Promise<string> => {
     },
     body: JSON.stringify(data),
   }
-  console.log("Start fetching")
-  const response = await fetch(secrets.replicateProxy, options)
-  const parsedResponse = await response.json()
-  if (parsedResponse.output) {
+  try {
+    console.log("Start fetching")
+    const response = await fetch(secrets.replicateProxy, options)
+    const parsedResponse = await response.json()
     const result = parsedResponse.output
       .join("")
       .match(/\+([^+]+)\+/)[1]
       .trim()
     console.log("Got it!")
     return result
-  } else {
-    console.log("Oh no...")
-    return ""
+  } catch {
+    console.log("Trying again...")
+    return fetchData(data)
   }
 }
 

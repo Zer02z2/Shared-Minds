@@ -1,10 +1,10 @@
 :root {
-  --text-primary: #b4b4b4;
-  --text-secondary: #969696;
-  --background-color: #121313;
-  --column-background: #1b1d1d;
-  --story-background: #212424;
-  --input-background: #2e302f;
+  --text-primary: #212424;
+  --text-secondary: #414242;
+  --background-color: #d1d3d4;
+  --column-background: #ebebeb;
+  --story-background: #dddee0;
+  --input-background: #c7c9c6;
 }
 
 body {
@@ -45,7 +45,7 @@ body {
 .intro {
   & h1 {
     color: var(--text-primary);
-    margin-bottom: 0.6rem;
+    margin-bottom: 1rem;
   }
   & h2 {
     font-size: 20px;
@@ -96,12 +96,12 @@ body {
   z-index: 99;
   display: flex;
   align-items: center;
-  padding-top: 1rem;
+  padding: 1rem 0rem;
 }
 #input-field {
-  border: none;
+  border: solid 1px var(--text-secondary);
   border-radius: 0.8rem;
-  background-color: var(--input-background);
+  background: none;
   font-size: 16px;
   width: 100%;
   padding: 1.4rem 1.4rem;
