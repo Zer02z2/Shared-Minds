@@ -8,7 +8,7 @@ const optionContainer = document.getElementById("option-container")
 const trashCan = document.getElementById("trash")
 
 const init = () => {
-  let history: string = ""
+  let fullStory: string = ""
   if (!(input && story && optionContainer && trashCan)) {
     console.error("Counldn't load all elements")
     return
@@ -25,11 +25,11 @@ const init = () => {
     event.preventDefault()
     input.value = ""
 
-    history += values
+    fullStory += values
     const paragraph = HTMLText.create("p", values, "my-story")
     appendToStory(paragraph)
 
-    update(history)
+    update(fullStory)
   })
 
   const appendToStory = (e: HTMLElement) => {
@@ -40,11 +40,11 @@ const init = () => {
   }
 
   const update = async (input: string) => {
-    const newStory = await fetchData(storyPrompt(input))
-    getOptions(newStory)
-    const paragraph = HTMLText.create("p", ` ${newStory}`, "story-block")
+    const newParagraph = await fetchData(storyPrompt(input))
+    getOptions(newParagraph)
+    const paragraph = HTMLText.create("p", ` ${newParagraph}`, "story-block")
     appendToStory(paragraph)
-    history += newStory
+    fullStory += newParagraph
   }
 
   const getOptions = async (input: string) => {
@@ -59,7 +59,7 @@ const init = () => {
     options.forEach((option) => {
       const choice = HTMLText.create("p", `${option.shortChoice}`, "option")
       choice.addEventListener("click", () => {
-        history += option.fullChoice
+        fullStory += option.fullChoice
         const paragraph = HTMLText.create(
           "p",
           `${option.fullChoice}`,
@@ -67,7 +67,7 @@ const init = () => {
         )
         appendToStory(paragraph)
         removeChildren(optionContainer)
-        update(history)
+        update(fullStory)
       })
       optionContainer.appendChild(choice)
     })
