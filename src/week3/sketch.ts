@@ -1,13 +1,6 @@
 import { HTMLElement, removeChildren } from "../library"
-import { secrets } from "../secrets"
-import {
-  choicePrompt,
-  Data,
-  imagePrompt,
-  initialPrompt,
-  storyPrompt,
-  translatePrompt,
-} from "./prompts"
+import { fetchData, getImage, getOptions } from "./fetch"
+import { storyPrompt } from "./prompts"
 
 const input = document.getElementById("input-field") as HTMLTextAreaElement
 const story = document.getElementById("story")
@@ -34,7 +27,7 @@ const init = () => {
       languageSelector
     )
   ) {
-    console.error("Counldn't load all elements")
+    alert("Couldn't load all resources.")
     return
   }
   trashCan.addEventListener("click", () => {
@@ -45,6 +38,13 @@ const init = () => {
     localStorage.setItem("language", languageSelector.value)
     location.reload()
   })
+
+  const appendToStory = (e: HTMLElement) => {
+    story.appendChild(e)
+    if (story.scrollHeight > story.clientHeight) {
+      story.scrollTo({ top: story.scrollHeight, behavior: "smooth" })
+    }
+  }
 
   input.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return
@@ -59,14 +59,6 @@ const init = () => {
 
     update(fullStory)
   })
-
-  const appendToStory = (e: HTMLElement) => {
-    story.appendChild(e)
-    if (story.scrollHeight > story.clientHeight) {
-      story.scrollTo({ top: story.scrollHeight, behavior: "smooth" })
-    }
-  }
-
   const update = async (input: string[]) => {
     removeChildren(optionContainer)
     loader.style.display = "block"
@@ -74,8 +66,8 @@ const init = () => {
     const newParagraph = await fetchData(
       storyPrompt(story, { language: language })
     )
-
-    getImage(newParagraph), await getOptions(newParagraph, { mode: "update" })
+    updateImage(newParagraph)
+    await updateOptions(newParagraph, "update")
     const paragraph = HTMLElement.createText(
       "p",
       ` ${newParagraph}`,
@@ -85,24 +77,24 @@ const init = () => {
     fullStory = [...fullStory, newParagraph]
   }
 
-  const getOptions = async (
-    input: string,
-    params: { mode: "init" | "update" }
-  ) => {
-    const getShortChoice = async () => {
-      const data =
-        params.mode === "init"
-          ? initialPrompt({ language: language })
-          : storyPrompt(input, { language: language })
-      const fullChoice = await fetchData(data)
-      const shortChoice = await fetchData(
-        choicePrompt(fullChoice, { language: language })
-      )
-      return { fullChoice: fullChoice, shortChoice: shortChoice }
-    }
-    const options = await Promise.all(
-      Array.from({ length: 3 }).map(() => getShortChoice())
+  const updateImage = async (input: string) => {
+    const context = fullStory[fullStory.length - 1]
+      ? fullStory[fullStory.length - 1]
+      : ""
+    const prompt = `${context} ${input}`
+    const src = await getImage(prompt, language)
+    const img = HTMLElement.createImage(
+      src,
+      "AI generated image.",
+      "story-image"
     )
+    removeChildren(imageContainer)
+    imageContainer.appendChild(img)
+  }
+
+  const updateOptions = async (input: string, mode: "init" | "update") => {
+    console.log("hi")
+    const options = await getOptions(input, { mode: mode }, language)
     loader.style.display = "none"
     options.forEach((option) => {
       const choice = HTMLElement.createText(
@@ -124,63 +116,8 @@ const init = () => {
     })
   }
 
-  const getImage = async (input: string) => {
-    const context = fullStory[fullStory.length - 1]
-      ? fullStory[fullStory.length - 1]
-      : ""
-    const englishPrompt =
-      language === "English"
-        ? `${context} ${input}`
-        : await fetchData(translatePrompt(`${context} ${input}`))
-    const shortPrompt = await fetchData(
-      choicePrompt(englishPrompt, { language: "English" })
-    )
-    console.log(shortPrompt)
-    const src = await fetchData(imagePrompt(shortPrompt))
-    const img = HTMLElement.createImage(
-      src,
-      "AI generated image.",
-      "story-image"
-    )
-    removeChildren(imageContainer)
-    imageContainer.appendChild(img)
-  }
-  getImage("A path leading to multiple universes.")
-  getOptions("", { mode: "init" })
-}
-
-const fetchData = async (data: Data[keyof Data]): Promise<string> => {
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify(data["data"]),
-  }
-  try {
-    console.log("Start fetching")
-    const response = await fetch(secrets.replicateProxy, options)
-    const parsedResponse = await response.json()
-    let result: string
-    switch (data["type"]) {
-      case "text":
-        result = parsedResponse.output
-          .join("")
-          .match(/\+([^+]+)\+/)[1]
-          .trim()
-        console.log("Got it!")
-        break
-      case "image":
-        result = parsedResponse.output
-        console.log(result)
-        break
-    }
-    return result
-  } catch {
-    console.log("Trying again...")
-    return fetchData(data)
-  }
+  updateImage("A path leading to multiple universes.")
+  updateOptions("", "init")
 }
 
 init()
