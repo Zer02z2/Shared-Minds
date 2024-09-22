@@ -111,8 +111,8 @@ export const initialPrompt = (): Data["text"] => {
   }
 }
 
-export const imagePrompt = (input: string): Data["image"] => {
-  const prompt = `${input}`
+export const imagePrompt = (input: string, context: string): Data["image"] => {
+  const prompt = `Genertate a colored image of this scene: ${context} ${input}.`
   return {
     type: "image",
     data: {

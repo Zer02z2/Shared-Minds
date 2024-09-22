@@ -16,7 +16,7 @@ const loader = document.getElementById("loader")
 const imageContainer = document.getElementById("image-container")
 
 const init = () => {
-  let fullStory: string = ""
+  let fullStory: string[] = []
   if (
     !(input && story && optionContainer && trashCan && loader && imageContainer)
   ) {
@@ -35,7 +35,7 @@ const init = () => {
     event.preventDefault()
     input.value = ""
 
-    fullStory += values
+    fullStory = [...fullStory, values]
     const paragraph = HTMLElement.createText("p", values, "my-story")
     appendToStory(paragraph)
 
@@ -49,18 +49,22 @@ const init = () => {
     }
   }
 
-  const update = async (input: string) => {
+  const update = async (input: string[]) => {
     removeChildren(optionContainer)
     loader.style.display = "block"
-    const newParagraph = await fetchData(storyPrompt(input))
-    await getOptions(newParagraph, { mode: "update" })
+    const story = input.join(" ")
+    const newParagraph = await fetchData(storyPrompt(story))
+    await Promise.all([
+      getImage(newParagraph),
+      getOptions(newParagraph, { mode: "update" }),
+    ])
     const paragraph = HTMLElement.createText(
       "p",
       ` ${newParagraph}`,
       "story-block"
     )
     appendToStory(paragraph)
-    fullStory += newParagraph
+    fullStory = [...fullStory, newParagraph]
   }
 
   const getOptions = async (
@@ -84,7 +88,7 @@ const init = () => {
         "option"
       )
       choice.addEventListener("click", () => {
-        fullStory += option.fullChoice
+        fullStory = [...fullStory, option.fullChoice]
         const paragraph = HTMLElement.createText(
           "p",
           `${option.fullChoice}`,
@@ -96,16 +100,20 @@ const init = () => {
       optionContainer.appendChild(choice)
     })
   }
-  const getImage = async () => {
-    const src = await fetchData(imagePrompt("random"))
+  const getImage = async (input: string) => {
+    const context = fullStory[fullStory.length - 1]
+      ? fullStory[fullStory.length - 1]
+      : ""
+    const src = await fetchData(imagePrompt(input, context))
     const img = HTMLElement.createImage(
       src,
       "AI generated image.",
       "story-image"
     )
+    removeChildren(imageContainer)
     imageContainer.appendChild(img)
   }
-  getImage()
+  getImage("A path leading to multiple universes")
   getOptions("", { mode: "init" })
 }
 
