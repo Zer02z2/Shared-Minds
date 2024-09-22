@@ -123,6 +123,7 @@ const init = () => {
       optionContainer.appendChild(choice)
     })
   }
+
   const getImage = async (input: string) => {
     const context = fullStory[fullStory.length - 1]
       ? fullStory[fullStory.length - 1]
@@ -131,7 +132,11 @@ const init = () => {
       language === "English"
         ? `${context} ${input}`
         : await fetchData(translatePrompt(`${context} ${input}`))
-    const src = await fetchData(imagePrompt(englishPrompt))
+    const shortPrompt = await fetchData(
+      choicePrompt(englishPrompt, { language: "English" })
+    )
+    console.log(shortPrompt)
+    const src = await fetchData(imagePrompt(shortPrompt))
     const img = HTMLElement.createImage(
       src,
       "AI generated image.",

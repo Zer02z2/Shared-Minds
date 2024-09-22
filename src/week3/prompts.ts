@@ -14,6 +14,7 @@ export interface Data {
       version: string
       input: {
         prompt: string
+        negative_prompt?: string
         width?: number
         height?: number
         num_outputs?: number
@@ -22,7 +23,10 @@ export interface Data {
   }
 }
 
-export const storyPrompt = (input: string, params:{language: string}): Data["text"] => {
+export const storyPrompt = (
+  input: string,
+  params: { language: string }
+): Data["text"] => {
   const promptOptions = [
     "twisting",
     "surprising",
@@ -51,7 +55,10 @@ export const storyPrompt = (input: string, params:{language: string}): Data["tex
   }
 }
 
-export const choicePrompt = (input: string, params:{language: string}): Data["text"] => {
+export const choicePrompt = (
+  input: string,
+  params: { language: string }
+): Data["text"] => {
   const prompt = `Summerize the follow sentences into a short sentence less then 8 words. You should not alter the subject or the meaning of the sentence. Add a + sign at the beginning and end of your response: ${input}`
   return {
     type: "text",
@@ -66,7 +73,7 @@ export const choicePrompt = (input: string, params:{language: string}): Data["te
   }
 }
 
-export const initialPrompt = (params:{language: string}): Data["text"] => {
+export const initialPrompt = (params: { language: string }): Data["text"] => {
   const numbers = ["one", "two", "three", "a gourp of"]
   const characters = ["animal", "grown adult", "kid", "location"]
   const conditions = [
@@ -114,14 +121,15 @@ export const initialPrompt = (params:{language: string}): Data["text"] => {
 }
 
 export const imagePrompt = (input: string): Data["image"] => {
-  const prompt = `Comic style, colored, ${input}.`
+  const prompt = `${input} hd, hand-drawn, Studio Ghibli`
   return {
     type: "image",
     data: {
       version:
-        "db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf",
+        "5599ed30703defd1d160a25a63321b4dec97101d98b4674bcc56e41f62f35637",
       input: {
         prompt: prompt,
+        negative_prompt: "Worst quality, low quality, black and white",
         // width: 1024,
         // height: 1024,
         // num_outputs: 1,
@@ -131,7 +139,7 @@ export const imagePrompt = (input: string): Data["image"] => {
 }
 
 export const translatePrompt = (input: string): Data["text"] => {
-  const prompt = `Translate the following sentences into English. Add a + sign at the beginning and end of your response: ${input}`
+  const prompt = `Repeat the following sentences in English. Add a + sign at the beginning and end of your response: ${input}`
   return {
     type: "text",
     data: {
