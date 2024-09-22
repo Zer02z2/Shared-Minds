@@ -15,19 +15,34 @@ const optionContainer = document.getElementById("option")
 const trashCan = document.getElementById("trash")
 const loader = document.getElementById("loader")
 const imageContainer = document.getElementById("image-container")
+const languageSelector = document.getElementById(
+  "language-selector"
+) as HTMLSelectElement
 
 const init = () => {
   let fullStory: string[] = []
-  let language: string = "Simplified Chinese"
+  let language: string = localStorage.getItem("language") || "English"
   console.log(language)
   if (
-    !(input && story && optionContainer && trashCan && loader && imageContainer)
+    !(
+      input &&
+      story &&
+      optionContainer &&
+      trashCan &&
+      loader &&
+      imageContainer &&
+      languageSelector
+    )
   ) {
     console.error("Counldn't load all elements")
     return
   }
-
   trashCan.addEventListener("click", () => {
+    location.reload()
+  })
+  languageSelector.value = language
+  languageSelector.addEventListener("change", () => {
+    localStorage.setItem("language", languageSelector.value)
     location.reload()
   })
 

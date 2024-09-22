@@ -57,16 +57,23 @@ body {
   }
 }
 .intro {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
   & h1 {
     margin: 0;
     color: var(--text-primary);
-    margin-bottom: 1rem;
+    padding-right: 1rem;
+    font-size: 1.5rem;
   }
-  & h2 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #969696;
-    margin-top: 0;
+  & select {
+    border-radius: 2rem;
+    border: solid 1px var(--text-secondary);
+    color: var(--text-secondary);
+    background: none;
+    font-size: 1rem;
+    padding: 0.5rem 0.5rem;
+    cursor: pointer;
   }
 }
 .story-container {
