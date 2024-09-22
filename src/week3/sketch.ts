@@ -6,6 +6,7 @@ import {
   imagePrompt,
   initialPrompt,
   storyPrompt,
+  translatePrompt,
 } from "./prompts"
 
 const input = document.getElementById("input-field") as HTMLTextAreaElement
@@ -104,7 +105,10 @@ const init = () => {
     const context = fullStory[fullStory.length - 1]
       ? fullStory[fullStory.length - 1]
       : ""
-    const src = await fetchData(imagePrompt(input, context))
+    const englishPrompt = await fetchData(
+      translatePrompt(`${context} ${input}`)
+    )
+    const src = await fetchData(imagePrompt(englishPrompt))
     const img = HTMLElement.createImage(
       src,
       "AI generated image.",
@@ -113,7 +117,7 @@ const init = () => {
     removeChildren(imageContainer)
     imageContainer.appendChild(img)
   }
-  getImage("A path leading to multiple universes")
+  getImage("A path leading to multiple universes.")
   getOptions("", { mode: "init" })
 }
 

@@ -14,13 +14,15 @@ export interface Data {
       version: string
       input: {
         prompt: string
-        width: number
-        height: number
-        num_outputs: number
+        width?: number
+        height?: number
+        num_outputs?: number
       }
     }
   }
 }
+
+const language = "Simplified Chinese"
 
 export const storyPrompt = (input: string): Data["text"] => {
   const promptOptions = [
@@ -45,7 +47,7 @@ export const storyPrompt = (input: string): Data["text"] => {
         "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
       input: {
         prompt: prompt,
-        system_prompt: "You are a professional novel writter",
+        system_prompt: `You are a professional novel writter. You speak ${language}.`,
       },
     },
   }
@@ -60,6 +62,7 @@ export const choicePrompt = (input: string): Data["text"] => {
         "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
       input: {
         prompt: prompt,
+        system_prompt: `You are a professional novel writter. You speak ${language}.`,
       },
     },
   }
@@ -106,23 +109,38 @@ export const initialPrompt = (): Data["text"] => {
         "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
       input: {
         prompt: prompt,
+        system_prompt: `You are a professional novel writter. You speak ${language}.`,
       },
     },
   }
 }
 
-export const imagePrompt = (input: string, context: string): Data["image"] => {
-  const prompt = `Genertate a colored image of this scene: ${context} ${input}.`
+export const imagePrompt = (input: string): Data["image"] => {
+  const prompt = `Comic style, colored, ${input}.`
   return {
     type: "image",
     data: {
       version:
-        "5599ed30703defd1d160a25a63321b4dec97101d98b4674bcc56e41f62f35637",
+        "db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf",
       input: {
         prompt: prompt,
-        width: 1024,
-        height: 1024,
-        num_outputs: 1,
+        // width: 1024,
+        // height: 1024,
+        // num_outputs: 1,
+      },
+    },
+  }
+}
+
+export const translatePrompt = (input: string): Data["text"] => {
+  const prompt = `Translate the following sentences into English. Add a + sign at the beginning and end of your response: ${input}`
+  return {
+    type: "text",
+    data: {
+      version:
+        "fbfb20b472b2f3bdd101412a9f70a0ed4fc0ced78a77ff00970ee7a2383c575d",
+      input: {
+        prompt: prompt,
       },
     },
   }
