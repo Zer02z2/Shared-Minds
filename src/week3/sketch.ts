@@ -18,6 +18,8 @@ const imageContainer = document.getElementById("image-container")
 
 const init = () => {
   let fullStory: string[] = []
+  let language: string = "Simplified Chinese"
+  console.log(language)
   if (
     !(input && story && optionContainer && trashCan && loader && imageContainer)
   ) {
@@ -54,11 +56,11 @@ const init = () => {
     removeChildren(optionContainer)
     loader.style.display = "block"
     const story = input.join(" ")
-    const newParagraph = await fetchData(storyPrompt(story))
-    await Promise.all([
-      getImage(newParagraph),
-      getOptions(newParagraph, { mode: "update" }),
-    ])
+    const newParagraph = await fetchData(
+      storyPrompt(story, { language: language })
+    )
+
+    getImage(newParagraph), await getOptions(newParagraph, { mode: "update" })
     const paragraph = HTMLElement.createText(
       "p",
       ` ${newParagraph}`,
@@ -73,9 +75,14 @@ const init = () => {
     params: { mode: "init" | "update" }
   ) => {
     const getShortChoice = async () => {
-      const data = params.mode === "init" ? initialPrompt() : storyPrompt(input)
+      const data =
+        params.mode === "init"
+          ? initialPrompt({ language: language })
+          : storyPrompt(input, { language: language })
       const fullChoice = await fetchData(data)
-      const shortChoice = await fetchData(choicePrompt(fullChoice))
+      const shortChoice = await fetchData(
+        choicePrompt(fullChoice, { language: language })
+      )
       return { fullChoice: fullChoice, shortChoice: shortChoice }
     }
     const options = await Promise.all(
@@ -105,9 +112,10 @@ const init = () => {
     const context = fullStory[fullStory.length - 1]
       ? fullStory[fullStory.length - 1]
       : ""
-    const englishPrompt = await fetchData(
-      translatePrompt(`${context} ${input}`)
-    )
+    const englishPrompt =
+      language === "English"
+        ? `${context} ${input}`
+        : await fetchData(translatePrompt(`${context} ${input}`))
     const src = await fetchData(imagePrompt(englishPrompt))
     const img = HTMLElement.createImage(
       src,
