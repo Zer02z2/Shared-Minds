@@ -10,17 +10,16 @@ import {
 
 export const getOptions = async (
   input: string,
-  params: { mode: "init" | "update" },
-  language: string
+  params: { mode: "init" | "update"; language: string }
 ) => {
   const getShortChoice = async () => {
     const data =
       params.mode === "init"
-        ? initialPrompt({ language: language })
-        : storyPrompt(input, { language: language })
+        ? initialPrompt({ language: params.language })
+        : storyPrompt(input, { language: params.language })
     const fullChoice = await fetchData(data)
     const shortChoice = await fetchData(
-      choicePrompt(fullChoice, { language: language })
+      choicePrompt(fullChoice, { language: params.language })
     )
     return { fullChoice: fullChoice, shortChoice: shortChoice }
   }
@@ -30,9 +29,11 @@ export const getOptions = async (
   return options
 }
 
-export const getImage = async (input: string, language: string) => {
+export const getImage = async (input: string, params: { language: string }) => {
   const englishPrompt =
-    language === "English" ? input : await fetchData(translatePrompt(input))
+    params.language === "English"
+      ? input
+      : await fetchData(translatePrompt(input))
   const shortPrompt = await fetchData(
     choicePrompt(englishPrompt, { language: "English" })
   )

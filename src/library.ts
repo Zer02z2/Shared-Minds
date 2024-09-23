@@ -34,6 +34,7 @@ export const HTMLElement: {
     alt: string,
     className?: string
   ) => HTMLImageElement
+  createDiv: (className?: string) => HTMLElement
 } = {
   createText: (tag, content, className) => {
     const element = document.createElement(tag)
@@ -52,6 +53,11 @@ export const HTMLElement: {
     img.alt = alt
     if (className) img.classList.add(className)
     return img
+  },
+  createDiv: (className) => {
+    const div = document.createElement("div")
+    if (className) div.classList.add(className)
+    return div
   },
 }
 

@@ -7,13 +7,14 @@ const story = document.getElementById("story")
 const optionContainer = document.getElementById("option")
 const trashCan = document.getElementById("trash")
 const loader = document.getElementById("loader")
-const imageContainer = document.getElementById("image-container")
+const gallery = document.getElementById("gallery")
 const languageSelector = document.getElementById(
   "language-selector"
 ) as HTMLSelectElement
 
 const init = () => {
   let fullStory: string[] = []
+  let imageArr: string[] = []
   let language: string = localStorage.getItem("language") || "English"
   console.log(language)
   if (
@@ -23,7 +24,7 @@ const init = () => {
       optionContainer &&
       trashCan &&
       loader &&
-      imageContainer &&
+      gallery &&
       languageSelector
     )
   ) {
@@ -67,7 +68,7 @@ const init = () => {
       storyPrompt(story, { language: language })
     )
     updateImage(newParagraph)
-    await updateOptions(newParagraph, "update")
+    await updateOptions(newParagraph, { mode: "update" })
     const paragraph = HTMLElement.createText(
       "p",
       ` ${newParagraph}`,
@@ -82,19 +83,29 @@ const init = () => {
       ? fullStory[fullStory.length - 1]
       : ""
     const prompt = `${context} ${input}`
-    const src = await getImage(prompt, language)
+    const src = await getImage(prompt, { language: language })
     const img = HTMLElement.createImage(
       src,
       "AI generated image.",
       "story-image"
     )
-    removeChildren(imageContainer)
-    imageContainer.appendChild(img)
+    imageArr = [...imageArr, src]
+    const outerContainer = HTMLElement.createDiv("image-outer-container")
+    const innerContainer = HTMLElement.createDiv("image-inner-container")
+    innerContainer.appendChild(img)
+    outerContainer.appendChild(innerContainer)
+    gallery.appendChild(outerContainer)
   }
 
-  const updateOptions = async (input: string, mode: "init" | "update") => {
+  const updateOptions = async (
+    input: string,
+    params: { mode: "init" | "update" }
+  ) => {
     console.log("hi")
-    const options = await getOptions(input, { mode: mode }, language)
+    const options = await getOptions(input, {
+      mode: params.mode,
+      language: language,
+    })
     loader.style.display = "none"
     options.forEach((option) => {
       const choice = HTMLElement.createText(
@@ -117,7 +128,7 @@ const init = () => {
   }
 
   updateImage("A path leading to multiple universes.")
-  updateOptions("", "init")
+  updateOptions("", { mode: "init" })
 }
 
 init()
