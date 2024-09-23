@@ -34,7 +34,7 @@ const init = () => {
     return
   }
   let fullStory: string[] = []
-  let imageArr: string[] = []
+  let numOfImage: number = 0
   let currentImage: number = 0
   let language: string = localStorage.getItem("language") || "English"
 
@@ -60,6 +60,17 @@ const init = () => {
     appendToStory(paragraph)
 
     update(fullStory)
+  })
+
+  leftArrow.addEventListener("click", () => {
+    currentImage--
+    updateArrows()
+    moveGallery(currentImage)
+  })
+  rightArrow.addEventListener("click", () => {
+    currentImage++
+    updateArrows()
+    moveGallery(currentImage)
   })
 
   const appendToStory = (e: HTMLElement) => {
@@ -105,10 +116,10 @@ const init = () => {
       outerContainer.appendChild(innerContainer)
       gallery.appendChild(outerContainer)
 
-      currentImage++
-      imageArr = [...imageArr, src]
-      const size = gallery.clientWidth
-      gallery.style.transform = `translateX(${-size * imageArr.length}px)`
+      numOfImage++
+      currentImage = numOfImage
+      moveGallery(numOfImage)
+      updateArrows()
     }
   }
 
@@ -140,6 +151,18 @@ const init = () => {
       })
       optionContainer.appendChild(choice)
     })
+  }
+
+  const moveGallery = (index: number) => {
+    const size = gallery.clientWidth
+    gallery.style.transform = `translateX(${-size * index}px)`
+  }
+
+  const updateArrows = () => {
+    leftArrow.style.opacity = currentImage >= 2 ? "1" : "0"
+    leftArrow.style.pointerEvents = currentImage >= 2 ? "auto" : "none"
+    rightArrow.style.opacity = currentImage < numOfImage ? "1" : "0"
+    rightArrow.style.pointerEvents = currentImage < numOfImage ? "auto" : "none"
   }
 
   updateImage("A path leading to multiple universes.")

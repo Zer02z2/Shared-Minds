@@ -86,6 +86,8 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+  cursor: pointer;
 }
 #left-bg {
   transform: translateX(-50%);
@@ -96,6 +98,8 @@ body {
 .arrow {
   width: 2rem;
   height: 2rem;
+  filter: invert(9%) sepia(6%) saturate(679%) hue-rotate(131deg) brightness(94%)
+    contrast(87%);
 }
 #left-arrow {
   transform: translateX(120%);
