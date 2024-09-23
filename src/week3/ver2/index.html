@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zongze Week2</title>
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section class="inner-wrap">
+      <div class="column-wrap">
+        <div id="top-column" class="column">
+          <div id="gallery">
+            <div class="image-outer-container"></div>
+            <div class="image-outer-container"></div>
+          </div>
+          <div id="arrow-container">
+            <div class="arrow-bg" id="left-bg">
+              <img src="/left-arrow.svg" id="left-arrow" class="arrow" />
+            </div>
+            <div class="arrow-bg" id="right-bg">
+              <img src="/right-arrow.svg" id="right-arrow" class="arrow" />
+            </div>
+          </div>
+        </div>
+        <div id="bottom-column" class="column">
+          <div id="option-container">
+            <div id="loader"></div>
+            <div id="option"></div>
+          </div>
+          <div id="input-container">
+            <textarea
+              id="input-field"
+              rows="1"
+              placeholder="Choose one or write your own path"
+            ></textarea>
+            <img id="trash" src="../trash.svg" />
+            <select name="languages" id="language-selector">
+              <option value="English">English</option>
+              <option value="Simplified Chinese">Simplified Chinese</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script type="module" src="sketch.ts"></script>
+  </body>
+</html>
