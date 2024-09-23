@@ -9,15 +9,13 @@ const trashCan = document.getElementById("trash")
 const loader = document.getElementById("loader")
 const gallery = document.getElementById("gallery")
 const leftColumn = document.getElementById("left-column")
+const leftArrow = document.getElementById("left-bg")
+const rightArrow = document.getElementById("right-bg")
 const languageSelector = document.getElementById(
   "language-selector"
 ) as HTMLSelectElement
 
 const init = () => {
-  let fullStory: string[] = []
-  let imageArr: string[] = []
-  let language: string = localStorage.getItem("language") || "English"
-  console.log(language)
   if (
     !(
       input &&
@@ -26,28 +24,29 @@ const init = () => {
       trashCan &&
       loader &&
       gallery &&
-      languageSelector &&
-      leftColumn
+      leftColumn &&
+      leftArrow &&
+      rightArrow &&
+      languageSelector
     )
   ) {
     alert("Couldn't load all resources.")
     return
   }
-  trashCan.addEventListener("click", () => {
-    location.reload()
-  })
+  let fullStory: string[] = []
+  let imageArr: string[] = []
+  let currentImage: number = 0
+  let language: string = localStorage.getItem("language") || "English"
+
   languageSelector.value = language
   languageSelector.addEventListener("change", () => {
     localStorage.setItem("language", languageSelector.value)
     location.reload()
   })
 
-  const appendToStory = (e: HTMLElement) => {
-    story.appendChild(e)
-    if (story.scrollHeight > story.clientHeight) {
-      story.scrollTo({ top: story.scrollHeight, behavior: "smooth" })
-    }
-  }
+  trashCan.addEventListener("click", () => {
+    location.reload()
+  })
 
   input.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return
@@ -62,6 +61,14 @@ const init = () => {
 
     update(fullStory)
   })
+
+  const appendToStory = (e: HTMLElement) => {
+    story.appendChild(e)
+    if (story.scrollHeight > story.clientHeight) {
+      story.scrollTo({ top: story.scrollHeight, behavior: "smooth" })
+    }
+  }
+
   const update = async (input: string[]) => {
     removeChildren(optionContainer)
     loader.style.display = "block"
@@ -86,7 +93,6 @@ const init = () => {
       : ""
     const prompt = `${context} ${input}`
     const src = await getImage(prompt, { language: language })
-    imageArr = [...imageArr, src]
     const img = HTMLElement.createImage(
       src,
       "AI generated image.",
@@ -99,7 +105,9 @@ const init = () => {
       outerContainer.appendChild(innerContainer)
       gallery.appendChild(outerContainer)
 
-      const size = leftColumn.clientWidth
+      currentImage++
+      imageArr = [...imageArr, src]
+      const size = gallery.clientWidth
       gallery.style.transform = `translateX(${-size * imageArr.length}px)`
     }
   }
