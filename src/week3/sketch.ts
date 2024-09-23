@@ -9,6 +9,7 @@ const trashCan = document.getElementById("trash")
 const loader = document.getElementById("loader")
 const gallery = document.getElementById("gallery")
 const leftColumn = document.getElementById("left-column")
+const imageContainers = document.getElementsByClassName("image-outer-container")
 const leftArrow = document.getElementById("left-bg")
 const rightArrow = document.getElementById("right-bg")
 const languageSelector = document.getElementById(
@@ -27,7 +28,8 @@ const init = () => {
       leftColumn &&
       leftArrow &&
       rightArrow &&
-      languageSelector
+      languageSelector &&
+      imageContainers
     )
   ) {
     alert("Couldn't load all resources.")
@@ -65,12 +67,16 @@ const init = () => {
   leftArrow.addEventListener("click", () => {
     currentImage--
     updateArrows()
-    moveGallery(currentImage)
+    moveGallery()
   })
   rightArrow.addEventListener("click", () => {
     currentImage++
     updateArrows()
-    moveGallery(currentImage)
+    moveGallery()
+  })
+
+  window.addEventListener("resize", () => {
+    moveGallery()
   })
 
   const appendToStory = (e: HTMLElement) => {
@@ -118,7 +124,7 @@ const init = () => {
 
       numOfImage++
       currentImage = numOfImage
-      moveGallery(numOfImage)
+      moveGallery()
       updateArrows()
     }
   }
@@ -153,9 +159,9 @@ const init = () => {
     })
   }
 
-  const moveGallery = (index: number) => {
-    const size = gallery.clientWidth
-    gallery.style.transform = `translateX(${-size * index}px)`
+  const moveGallery = () => {
+    const size = imageContainers[0].clientWidth
+    gallery.style.transform = `translateX(${-size * currentImage}px)`
   }
 
   const updateArrows = () => {
