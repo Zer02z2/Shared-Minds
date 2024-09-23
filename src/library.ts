@@ -48,7 +48,7 @@ export const HTMLElement: {
     return element
   },
   createImage: (src, alt, className) => {
-    const img = document.createElement("img")
+    const img = new Image()
     img.src = src
     img.alt = alt
     if (className) img.classList.add(className)

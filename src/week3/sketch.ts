@@ -8,6 +8,7 @@ const optionContainer = document.getElementById("option")
 const trashCan = document.getElementById("trash")
 const loader = document.getElementById("loader")
 const gallery = document.getElementById("gallery")
+const leftColumn = document.getElementById("left-column")
 const languageSelector = document.getElementById(
   "language-selector"
 ) as HTMLSelectElement
@@ -25,7 +26,8 @@ const init = () => {
       trashCan &&
       loader &&
       gallery &&
-      languageSelector
+      languageSelector &&
+      leftColumn
     )
   ) {
     alert("Couldn't load all resources.")
@@ -84,17 +86,22 @@ const init = () => {
       : ""
     const prompt = `${context} ${input}`
     const src = await getImage(prompt, { language: language })
+    imageArr = [...imageArr, src]
     const img = HTMLElement.createImage(
       src,
       "AI generated image.",
       "story-image"
     )
-    imageArr = [...imageArr, src]
-    const outerContainer = HTMLElement.createDiv("image-outer-container")
-    const innerContainer = HTMLElement.createDiv("image-inner-container")
-    innerContainer.appendChild(img)
-    outerContainer.appendChild(innerContainer)
-    gallery.appendChild(outerContainer)
+    img.onload = () => {
+      const outerContainer = HTMLElement.createDiv("image-outer-container")
+      const innerContainer = HTMLElement.createDiv("image-inner-container")
+      innerContainer.appendChild(img)
+      outerContainer.appendChild(innerContainer)
+      gallery.appendChild(outerContainer)
+
+      const size = leftColumn.clientWidth
+      gallery.style.transform = `translateX(${-size * imageArr.length}px)`
+    }
   }
 
   const updateOptions = async (
