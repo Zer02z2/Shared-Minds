@@ -38,7 +38,7 @@ const init = () => {
   let fullStory: string[] = []
   let numOfImage: number = 0
   let currentImage: number = 0
-  let language: string = localStorage.getItem("language") || "English"
+  const language: string = localStorage.getItem("language") || "English"
 
   languageSelector.value = language
   languageSelector.addEventListener("change", () => {
