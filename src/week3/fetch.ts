@@ -61,11 +61,11 @@ export const fetchData = async (data: Data[keyof Data]): Promise<string> => {
           .join("")
           .match(/\+([^+]+)\+/)[1]
           .trim()
-        console.log("Got it!")
+        console.log("Got text!")
         break
       case "image":
         result = parsedResponse.output
-        console.log(result)
+        console.log("Got image!")
         break
     }
     return result

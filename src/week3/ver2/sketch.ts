@@ -141,11 +141,6 @@ const init = () => {
       )
       choice.addEventListener("click", () => {
         fullStory = [...fullStory, option.fullChoice]
-        const paragraph = HTMLElement.createText(
-          "p",
-          `${option.fullChoice}`,
-          "my-story"
-        )
         update(fullStory)
       })
       optionContainer.appendChild(choice)

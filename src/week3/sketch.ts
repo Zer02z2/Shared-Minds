@@ -133,7 +133,6 @@ const init = () => {
     input: string,
     params: { mode: "init" | "update" }
   ) => {
-    console.log("hi")
     const options = await getOptions(input, {
       mode: params.mode,
       language: language,
