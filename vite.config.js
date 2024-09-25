@@ -16,7 +16,6 @@ export default {
         week2: "/week2/index.html",
         week3: "/week3/index.html",
       },
-      external: ["/week3/ver2/**"],
     },
   },
 }
