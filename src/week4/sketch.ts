@@ -3,16 +3,23 @@ import { initializeApp } from "firebase/app"
 import { secrets } from "../secrets"
 import { updateLocker } from "./locker"
 
-const lockers = [...document.getElementsByClassName("grid")] as HTMLElement[]
-
 export interface Data {
   id: string
   status: "opened" | "closed" | "occupied" | "locked"
   time: number | null
 }
 
+const lockers = [...document.getElementsByClassName("grid")] as HTMLElement[]
 initializeApp(secrets.firebaseConfig)
 const db = getDatabase()
+
+export const writeData = (data: Data) => {
+  set(ref(db, `locker/${data.id}`), {
+    id: data.id,
+    status: data.status,
+    time: data.time,
+  })
+}
 
 const init = () => {
   if (!lockers) return
@@ -44,11 +51,3 @@ const init = () => {
 }
 
 init()
-
-export const writeData = (data: Data) => {
-  set(ref(db, `locker/${data.id}`), {
-    id: data.id,
-    status: data.status,
-    time: data.time,
-  })
-}
