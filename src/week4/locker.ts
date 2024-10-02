@@ -2,39 +2,56 @@ import { HTMLElement, removeChildren } from "../library"
 import { Data, LockerInfo, writeData } from "./sketch"
 
 const options = {
-  opened: { src: "./locker/opened.jpg", text: "Summon cat", class: "opened" },
-  locked: { src: "./locker/closed.jpg", text: "Open", class: "locked" },
-  closed: { src: "./locker/closed.jpg", text: "Open", class: "closed" },
-  occupied: { src: "./locker/cat.jpg", text: "Open", class: "locked" },
+  opened: {
+    src: "/shared-minds/locker/opened.jpg",
+    text: "Summon cat",
+    class: "opened",
+  },
+  locked: {
+    src: "/shared-minds/locker/closed.jpg",
+    text: "Open",
+    class: "locked",
+  },
+  closed: {
+    src: "/shared-minds/locker/closed.jpg",
+    text: "Open",
+    class: "closed",
+  },
+  occupied: {
+    src: "/shared-minds/locker/cat.jpg",
+    text: "Open",
+    class: "locked",
+  },
 }
 
 export const updateLocker = (info: LockerInfo) => {
   const { target, data } = info
+  const { id, status, time } = data
   const container = HTMLElement.createDiv("locker-container")
   const img = HTMLElement.createImage(
-    options[info.data.status].src,
+    options[status].src,
     "locker image",
     "locker"
   )
   const timerDiv = HTMLElement.createDiv("timer-container")
   const timer = HTMLElement.createText("p", "", "timer")
   timerDiv.appendChild(timer)
-  if (data.time) {
-    updateTimer(data.id, timer, data.time)
+  if (time) {
+    updateTimer(id, timer, time)
   }
 
   const button = HTMLElement.createButton(
-    options[data.status].text,
-    `button ${options[data.status].class}`
+    options[status].text,
+    `button ${options[status].class}`
   )
 
   button.addEventListener("click", () => {
-    switch (data.status) {
+    switch (status) {
       case "closed":
-        revealReality(data.id)
+        revealReality(id)
         break
       case "opened":
-        addCat(data.id)
+        addCat(id)
         break
     }
   })
