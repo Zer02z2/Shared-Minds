@@ -30,7 +30,7 @@ export const updateLocker = (target: HTMLElement, data: Data) => {
   button.addEventListener("click", () => {
     switch (data.status) {
       case "closed":
-        writeData({ id: data.id, status: "opened", time: null })
+        revealReality(data.id)
         break
       case "opened":
         addCat(data.id)
@@ -75,4 +75,13 @@ const updateTimer = (
   setTimeout(() => {
     updateTimer(id, timer, unlockTime)
   }, 500)
+}
+
+const revealReality = (id: Data["id"]) => {
+  const number = Math.random()
+  if (number < 0.5) {
+    addCat(id)
+  } else {
+    writeData({ id: id, status: "opened", time: null })
+  }
 }
