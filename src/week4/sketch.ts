@@ -1,36 +1,57 @@
-import { getDatabase, ref, onValue, set, push, remove } from "firebase/database"
+import { getDatabase, ref, onValue, set } from "firebase/database"
 import { initializeApp } from "firebase/app"
 import { secrets } from "../secrets"
+import { updateLocker } from "./locker"
 
-const lockers = [...document.getElementsByClassName("grid")]
+const lockers = [...document.getElementsByClassName("grid")] as HTMLElement[]
 
 export interface Data {
-  status: "opened" | "closed" | "occupied"
-  time: number | null
+  id: string
+  status: "opened" | "closed" | "occupied" | "locked"
+  time: number
 }
 
 const init = () => {
   if (!lockers) return
-  const lockerData: { [id: string]: { data: Data } } = {}
-  lockers.forEach((locker) => {
-    lockerData[locker.id] = { data: { status: "closed", time: null } }
+  const lockerData: { data: Data; target: HTMLElement }[] = lockers.map(
+    (locker) => {
+      return {
+        data: { id: locker.id, status: "locked", time: 0 },
+        target: locker,
+      }
+    }
+  )
+  lockerData.forEach((info) => {
+    updateLocker(info.target, info.data)
   })
 
   initializeApp(secrets.firebaseConfig)
 
   const db = getDatabase()
   onValue(ref(db, "locker"), (snapshot) => {
-    const data = snapshot.val()
-    console.log(data)
+    const data: Data[] = snapshot.val()
+    lockerData.forEach((info) => {
+      const record = data.find((obj) => {
+        try {
+          if (obj.id === info.data.id) return true
+        } catch {
+          return false
+        }
+      })
+      if (record) info.data = record
+      else writeData(info.data)
+      updateLocker(info.target, info.data)
+    })
   })
 
-  const writeData = (id: string, data: Data) => {
-    set(ref(db, `locker/${id}`), {
+  const writeData = (data: Data) => {
+    set(ref(db, `locker/${data.id}`), {
+      id: data.id,
       status: data.status,
       time: data.time,
     })
   }
-  writeData("1", { status: "opened", time: null })
+  //writeData({ id: "1", status: "opened", time: null })
 }
 
 init()

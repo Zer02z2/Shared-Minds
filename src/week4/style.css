@@ -39,6 +39,21 @@ body {
   cursor: pointer;
 }
 
+.opened {
+  background-color: rgb(7, 57, 192);
+  color: white;
+}
+
+.closed {
+  background-color: rgba(255, 231, 12, 0.945);
+}
+
+.locked {
+  background-color: rgb(211, 209, 209);
+  color: gray;
+  cursor: not-allowed;
+}
+
 .timer-container {
   position: absolute;
   top: 35%;

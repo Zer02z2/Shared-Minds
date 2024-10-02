@@ -63,7 +63,12 @@ export const HTMLElement: {
   createButton: (content, className) => {
     const button = document.createElement("button")
     if (content) button.textContent = content
-    if (className) button.classList.add(className)
+    if (className) {
+      const classList = className.split(" ")
+      classList.forEach((name) => {
+        button.classList.add(name)
+      })
+    }
     return button
   },
 }
