@@ -26,6 +26,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* animation: shake 0.2s linear 1; */
 }
 
 .locker {
@@ -65,4 +66,16 @@ body {
 .timer {
   font-weight: 600;
   font-size: 20px;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(100px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

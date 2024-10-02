@@ -1,5 +1,5 @@
 import { HTMLElement, removeChildren } from "../library"
-import { Data, writeData } from "./sketch"
+import { Data, LockerInfo, writeData } from "./sketch"
 
 const options = {
   opened: { src: "./locker/opened.jpg", text: "Summon cat", class: "opened" },
@@ -8,10 +8,11 @@ const options = {
   occupied: { src: "./locker/cat.jpg", text: "Open", class: "locked" },
 }
 
-export const updateLocker = (target: HTMLElement, data: Data) => {
+export const updateLocker = (info: LockerInfo) => {
+  const { target, data } = info
   const container = HTMLElement.createDiv("locker-container")
   const img = HTMLElement.createImage(
-    options[data.status].src,
+    options[info.data.status].src,
     "locker image",
     "locker"
   )
@@ -48,7 +49,7 @@ export const updateLocker = (target: HTMLElement, data: Data) => {
 const addCat = (id: Data["id"]) => {
   writeData({ id: id, status: "occupied", time: null })
   setTimeout(() => {
-    const time = Date.now() + 5 * 1000
+    const time = Date.now() + 60 * 60 * 1000
     writeData({ id: id, status: "locked", time: time })
   }, 1000)
 }
