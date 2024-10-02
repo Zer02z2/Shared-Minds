@@ -2,26 +2,35 @@ import { getDatabase, ref, onValue, set, push, remove } from "firebase/database"
 import { initializeApp } from "firebase/app"
 import { secrets } from "../secrets"
 
-initializeApp(secrets.firebaseConfig)
+const lockers = [...document.getElementsByClassName("grid")]
 
-const db = getDatabase()
-const lockerRef = ref(db, "locker")
-onValue(lockerRef, (snapshot) => {
-  const data = snapshot.val()
-  console.log(data)
-})
+export interface Data {
+  status: "opened" | "closed" | "occupied"
+  time: number | null
+}
 
-const writeData = () => {
-  set(ref(db, `locker/1`), {
-    status: "opened",
-    time: 2000,
+const init = () => {
+  if (!lockers) return
+  const lockerData: { [id: string]: { data: Data } } = {}
+  lockers.forEach((locker) => {
+    lockerData[locker.id] = { data: { status: "closed", time: null } }
   })
+
+  initializeApp(secrets.firebaseConfig)
+
+  const db = getDatabase()
+  onValue(ref(db, "locker"), (snapshot) => {
+    const data = snapshot.val()
+    console.log(data)
+  })
+
+  const writeData = (id: string, data: Data) => {
+    set(ref(db, `locker/${id}`), {
+      status: data.status,
+      time: data.time,
+    })
+  }
+  writeData("1", { status: "opened", time: null })
 }
 
-writeData()
-
-const removeData = () => {
-  remove(lockerRef)
-}
-
-//removeData()
+init()

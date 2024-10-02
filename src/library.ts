@@ -35,6 +35,7 @@ export const HTMLElement: {
     className?: string
   ) => HTMLImageElement
   createDiv: (className?: string) => HTMLElement
+  createButton: (content?: string, className?: string) => HTMLButtonElement
 } = {
   createText: (tag, content, className) => {
     const element = document.createElement(tag)
@@ -58,6 +59,12 @@ export const HTMLElement: {
     const div = document.createElement("div")
     if (className) div.classList.add(className)
     return div
+  },
+  createButton: (content, className) => {
+    const button = document.createElement("button")
+    if (content) button.textContent = content
+    if (className) button.classList.add(className)
+    return button
   },
 }
 
