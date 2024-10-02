@@ -1,5 +1,5 @@
 import { HTMLElement, removeChildren } from "../library"
-import { Data } from "./sketch"
+import { Data, writeData } from "./sketch"
 
 const options = {
   opened: { src: "./locker/opened.jpg", text: "Summon cat", class: "opened" },
@@ -23,6 +23,19 @@ export const updateLocker = (target: HTMLElement, data: Data) => {
     options[data.status].text,
     `button ${options[data.status].class}`
   )
+
+  button.addEventListener("click", () => {
+    switch (data.status) {
+      case "closed":
+        writeData({ id: data.id, status: "opened", time: null })
+        break
+      case "opened":
+        writeData({ id: data.id, status: "locked", time: null })
+        break
+      case "locked":
+        writeData({ id: data.id, status: "closed", time: null })
+    }
+  })
 
   container.appendChild(img)
   container.appendChild(timerDiv)

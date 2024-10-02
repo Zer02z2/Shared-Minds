@@ -8,26 +8,23 @@ const lockers = [...document.getElementsByClassName("grid")] as HTMLElement[]
 export interface Data {
   id: string
   status: "opened" | "closed" | "occupied" | "locked"
-  time: number
+  time: number | null
 }
+
+initializeApp(secrets.firebaseConfig)
+const db = getDatabase()
 
 const init = () => {
   if (!lockers) return
   const lockerData: { data: Data; target: HTMLElement }[] = lockers.map(
     (locker) => {
       return {
-        data: { id: locker.id, status: "locked", time: 0 },
+        data: { id: locker.id, status: "closed", time: null },
         target: locker,
       }
     }
   )
-  lockerData.forEach((info) => {
-    updateLocker(info.target, info.data)
-  })
 
-  initializeApp(secrets.firebaseConfig)
-
-  const db = getDatabase()
   onValue(ref(db, "locker"), (snapshot) => {
     const data: Data[] = snapshot.val()
     lockerData.forEach((info) => {
@@ -40,18 +37,18 @@ const init = () => {
       })
       if (record) info.data = record
       else writeData(info.data)
+      //writeData(info.data)
       updateLocker(info.target, info.data)
     })
   })
-
-  const writeData = (data: Data) => {
-    set(ref(db, `locker/${data.id}`), {
-      id: data.id,
-      status: data.status,
-      time: data.time,
-    })
-  }
-  //writeData({ id: "1", status: "opened", time: null })
 }
 
 init()
+
+export const writeData = (data: Data) => {
+  set(ref(db, `locker/${data.id}`), {
+    id: data.id,
+    status: data.status,
+    time: data.time,
+  })
+}
