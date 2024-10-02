@@ -1,27 +1,14 @@
 import { HTMLElement, removeChildren } from "../library"
 import { Data, LockerInfo, writeData } from "./sketch"
+import catUrl from "./locker/cat.jpg"
+import openedUrl from "./locker/opened.jpg"
+import closedUrl from "./locker/closed.jpg"
 
 const options = {
-  opened: {
-    src: "/shared-minds/locker/opened.jpg",
-    text: "Summon cat",
-    class: "opened",
-  },
-  locked: {
-    src: "/shared-minds/locker/closed.jpg",
-    text: "Open",
-    class: "locked",
-  },
-  closed: {
-    src: "/shared-minds/locker/closed.jpg",
-    text: "Open",
-    class: "closed",
-  },
-  occupied: {
-    src: "/shared-minds/locker/cat.jpg",
-    text: "Open",
-    class: "locked",
-  },
+  opened: { src: openedUrl, text: "Summon cat", class: "opened" },
+  locked: { src: closedUrl, text: "Open", class: "locked" },
+  closed: { src: closedUrl, text: "Open", class: "closed" },
+  occupied: { src: catUrl, text: "Open", class: "locked" },
 }
 
 export const updateLocker = (info: LockerInfo) => {
