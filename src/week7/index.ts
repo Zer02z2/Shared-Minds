@@ -1,7 +1,51 @@
 import fullAppleUrl from "./fullApple.jpg"
 import eatenAppleUrl from "./eatenApple.jpg"
 
-const url = "https://liked-crappie-simply.ngrok-free.app"
+const slider = document.getElementById("slider") as HTMLInputElement
+const gallery = document.getElementById("gallery")
+
+let picture1Base64: string | undefined, picture2Base64: string | undefined
+
+const preload = async () => {
+  picture1Base64 = await convertImgToBase64(fullAppleUrl)
+  picture2Base64 = await convertImgToBase64(eatenAppleUrl)
+  init()
+}
+
+const init = () => {
+  if (!(slider && gallery)) return
+  console.log("init")
+  slider.addEventListener("change", () => {
+    console.log(slider.value)
+  })
+  fetchImage()
+}
+
+const fetchImage = async () => {
+  const url = "https://dano.ngrok.dev/generateIt/"
+  const data = {
+    input: {
+      prompt: "a half eaten apple",
+      width: 512,
+      height: 512,
+      picture1: picture1Base64,
+      picture2: picture2Base64,
+    },
+  }
+  const options = {
+    headers: {
+      "Content-Type": `application/json`,
+    },
+    method: "POST",
+    body: JSON.stringify(data),
+  }
+  console.log("start fetching")
+  try {
+    const response = await fetch(url, options)
+    const result = await response.json()
+    console.log(result)
+  } catch (error) {}
+}
 
 const convertImgToBase64 = async (imgPath: string) => {
   try {
@@ -25,8 +69,4 @@ const convertImgToBase64 = async (imgPath: string) => {
   }
 }
 
-const preload = async () => {
-  const a = await convertImgToBase64(fullAppleUrl)
-  console.log(a)
-}
 preload()
