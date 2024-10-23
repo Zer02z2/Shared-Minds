@@ -15,7 +15,10 @@ const convertImgToBase64 = async (imgPath: string) => {
       reader.onerror = reject
       reader.readAsDataURL(blob)
     })
-    if (typeof base64 === "string") return base64
+    if (typeof base64 === "string") {
+      const result = base64.split(",")[1]
+      return result
+    }
     throw new Error("Base64 is not a string")
   } catch (error) {
     console.log(error)
