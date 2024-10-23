@@ -1,0 +1,13 @@
+body {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.inner-wrap {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+}
