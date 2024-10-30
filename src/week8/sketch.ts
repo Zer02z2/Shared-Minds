@@ -1,7 +1,7 @@
 import { fetchEmbedding } from "./fetch"
 import { UMAP } from "umap-js"
 import seedrandom from "seedrandom"
-import { lerp } from "../library"
+import { lerp, line } from "../library"
 
 const cnv = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = cnv.getContext("2d")
@@ -29,6 +29,8 @@ const init = () => {
   ctx.font = "30px Helvetica"
   ctx.textAlign = "center"
   ctx.textBaseline = "middle"
+  ctx.strokeStyle = "rgba(100,100,100,0.9)"
+  ctx.lineWidth = 1
 
   input.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return
@@ -59,10 +61,19 @@ const render = () => {
   ctx.fillStyle = "black"
 
   if (!Object.keys(wordBlocks)) return
-  Object.keys(wordBlocks).forEach((key) => {
+  const wordKeys = Object.keys(wordBlocks)
+  wordKeys.forEach((key) => {
+    const word = wordBlocks[key]
+    wordKeys.forEach((otherKey) => {
+      const otherWord = wordBlocks[otherKey]
+      line(ctx, word.x, word.y, otherWord.x, otherWord.y)
+    })
+  })
+  wordKeys.forEach((key) => {
     const word = wordBlocks[key]
     const text = word.text
     ctx.fillText(text, word.x, word.y)
+
     if (!(word.xTarget && word.yTarget)) return
     word.x = lerp(word.x, word.xTarget, 0.1)
     word.y = lerp(word.y, word.yTarget, 0.1)
@@ -75,7 +86,7 @@ const findUmap = (parsedResponse: any) => {
   const embeddings = output.map((point) => point.embedding)
   const myrng = seedrandom("hello.")
   const umap = new UMAP({
-    nNeighbors: Object.keys(wordBlocks).length - 1,
+    nNeighbors: Math.min(Object.keys(wordBlocks).length - 1, 6),
     minDist: 0.1,
     nComponents: 2,
     random: myrng,
