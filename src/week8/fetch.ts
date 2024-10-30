@@ -1,3 +1,6 @@
+import { UMAP } from "umap-js"
+const seedrandom = require("seedrandom")
+
 import { wordsPrompt, Data, embeddingPrompt, sentencePrompt } from "./prompts"
 
 const url = "https://replicate-api-proxy.glitch.me/create_n_get/"
@@ -18,7 +21,9 @@ export const fetchWords = async (banList: string[]) => {
 
 export const fetchSentence = async (words: string[], numberOfWords: number) => {
   try {
-    const result = await fetchData(sentencePrompt(words, numberOfWords))
+    const result: { embedding: number[][]; input: string } = await fetchData(
+      sentencePrompt(words, numberOfWords)
+    )
     if (typeof result !== "string") throw new Error()
     return result
   } catch {
@@ -29,7 +34,7 @@ export const fetchSentence = async (words: string[], numberOfWords: number) => {
 export const fetchEmbedding = async (input: string) => {
   try {
     const result = await fetchData(embeddingPrompt(input))
-    if (typeof result !== "number") throw new Error()
+    //if (typeof result !== "number") throw new Error()
     return result
   } catch {
     alert("fetch embedding failed")
@@ -53,7 +58,9 @@ export const fetchData = async (data: Data[keyof Data]) => {
       return parseText(parsedResponse)
     }
     if (data["type"] === "embedding") {
-      return parseEmbedding(parsedResponse)
+      //return parseEmbedding(parsedResponse)
+      parseEmbedding(parsedResponse)
+      return parsedResponse.output
     }
     throw new Error()
   } catch {
@@ -72,15 +79,6 @@ const parseText = (parsedResponse: any) => {
 const parseEmbedding = (parsedResponse: any) => {
   const output: { embedding: number[]; input: string }[] = parsedResponse.output
   const embeddings = output.map((point) => point.embedding)
-  const distMap = embeddings.map((numbers) => {
-    return Math.sqrt(
-      numbers.reduce(
-        (accumulator, currentValue) => accumulator + currentValue * currentValue
-      )
-    )
-  })
-  const distSum = distMap.reduce(
-    (accumulator, currentValue) => accumulator + currentValue
-  )
-  return distSum
+  const myrng = new seedrandom("hellow")
+  console.log(myrng)
 }
