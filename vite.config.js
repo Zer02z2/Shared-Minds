@@ -16,6 +16,7 @@ export default {
         week2: "/week2/index.html",
         week3: "/week3/index.html",
         week4: "/week4/index.html",
+        week8: "/week8/index.html",
       },
     },
   },
