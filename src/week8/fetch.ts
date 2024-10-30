@@ -1,32 +1,6 @@
-import { wordsPrompt, Data, embeddingPrompt, sentencePrompt } from "./prompts"
+import { Data, embeddingPrompt } from "./prompts"
 
 const url = "https://replicate-api-proxy.glitch.me/create_n_get/"
-
-export const fetchWords = async (banList: string[]) => {
-  try {
-    const result = await fetchData(wordsPrompt(banList))
-    if (typeof result !== "string") throw new Error()
-    const wordArr = result.split(/[^a-zA-Z]+/)
-    if (wordArr.length !== 2) {
-      throw new Error()
-    }
-    return wordArr
-  } catch {
-    alert("fetch words failed")
-  }
-}
-
-export const fetchSentence = async (words: string[], numberOfWords: number) => {
-  try {
-    const result: { embedding: number[][]; input: string } = await fetchData(
-      sentencePrompt(words, numberOfWords)
-    )
-    if (typeof result !== "string") throw new Error()
-    return result
-  } catch {
-    alert("fetch words failed")
-  }
-}
 
 export const fetchEmbedding = async (input: string) => {
   try {
