@@ -52,5 +52,27 @@ const findUmap = (parsedResponse: any) => {
     spread: 0.99,
   })
   const fittings = umap.fit(embeddings)
-  console.log(fittings)
+  const normalizedFittings = normalize(fittings)
+  console.log(normalizedFittings)
+}
+
+const normalize = (arrayOfNumbers: number[][]) => {
+  let max = [0, 0]
+  let min = [0, 0]
+  for (let i = 0; i < arrayOfNumbers.length; i++) {
+    for (let j = 0; j < 2; j++) {
+      if (arrayOfNumbers[i][j] > max[j]) {
+        max[j] = arrayOfNumbers[i][j]
+      }
+      if (arrayOfNumbers[i][j] < min[j]) {
+        min[j] = arrayOfNumbers[i][j]
+      }
+    }
+  }
+  const normalizedArr = arrayOfNumbers.map((numbers) => {
+    const num1 = (numbers[0] - min[0]) / (max[0] - min[0])
+    const num2 = (numbers[1] - min[1]) / (max[1] - min[1])
+    return [num1, num2]
+  })
+  return normalizedArr
 }
