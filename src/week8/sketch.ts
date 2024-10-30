@@ -2,11 +2,17 @@ import { fetchEmbedding } from "./fetch"
 import { UMAP } from "umap-js"
 import seedrandom from "seedrandom"
 
-const cnv = document.getElementById("canvas")
+const cnv = document.getElementById("canvas") as HTMLCanvasElement
+const ctx = cnv.getContext("2d")
 const input = document.getElementById("input-field") as HTMLInputElement
+if (!(cnv && ctx && input)) return
 
 interface WordBlock {
   text: string
+  x?: number
+  y?: number
+  xTarget?: number
+  yTarget?: number
 }
 interface WordBlocks {
   [name: string]: WordBlock
@@ -15,7 +21,12 @@ interface WordBlocks {
 const wordBlocks: WordBlocks = {}
 
 const init = () => {
-  if (!(cnv && input)) return
+  ctx.fillStyle = "rgba(150,150,150,0.9)"
+  ctx.fillRect(0, 0, cnv.width, cnv.height)
+  ctx.font = "20px Helvetica"
+  ctx.fillStyle = "black"
+  ctx.textAlign = "center"
+  ctx.textBaseline = "middle"
 
   input.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return
@@ -28,14 +39,14 @@ const init = () => {
     const combinedString = allSentences.join("\n")
     input.value = ""
     update(combinedString)
-    console.log(combinedString)
   })
 }
 
 init()
 
-const update = async (input: string) => {
-  const embeddingResult = await fetchEmbedding(input)
+const update = async (value: string) => {
+  const embeddingResult = await fetchEmbedding(value)
+  wordBlocks[value].x = 1
   if (Object.keys(wordBlocks).length < 2) return
   findUmap(embeddingResult)
 }
