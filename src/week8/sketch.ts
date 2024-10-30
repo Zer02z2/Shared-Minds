@@ -1,4 +1,6 @@
 import { fetchEmbedding } from "./fetch"
+import { UMAP } from "umap-js"
+import seedrandom from "seedrandom"
 
 const cnv = document.getElementById("canvas")
 const input = document.getElementById("input-field") as HTMLInputElement
@@ -33,6 +35,22 @@ const init = () => {
 init()
 
 const update = async (input: string) => {
-  const embedding = await fetchEmbedding(input)
-  console.log(embedding)
+  const embeddingResult = await fetchEmbedding(input)
+  if (Object.keys(wordBlocks).length < 2) return
+  findUmap(embeddingResult)
+}
+
+const findUmap = (parsedResponse: any) => {
+  const output: { embedding: number[]; input: string }[] = parsedResponse.output
+  const embeddings = output.map((point) => point.embedding)
+  const myrng = seedrandom("hello.")
+  const umap = new UMAP({
+    nNeighbors: Object.keys(wordBlocks).length - 1,
+    minDist: 0.1,
+    nComponents: 2,
+    random: myrng,
+    spread: 0.99,
+  })
+  const fittings = umap.fit(embeddings)
+  console.log(fittings)
 }

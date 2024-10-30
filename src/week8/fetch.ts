@@ -1,6 +1,3 @@
-import { UMAP } from "umap-js"
-const seedrandom = require("seedrandom")
-
 import { wordsPrompt, Data, embeddingPrompt, sentencePrompt } from "./prompts"
 
 const url = "https://replicate-api-proxy.glitch.me/create_n_get/"
@@ -34,7 +31,6 @@ export const fetchSentence = async (words: string[], numberOfWords: number) => {
 export const fetchEmbedding = async (input: string) => {
   try {
     const result = await fetchData(embeddingPrompt(input))
-    //if (typeof result !== "number") throw new Error()
     return result
   } catch {
     alert("fetch embedding failed")
@@ -58,13 +54,11 @@ export const fetchData = async (data: Data[keyof Data]) => {
       return parseText(parsedResponse)
     }
     if (data["type"] === "embedding") {
-      //return parseEmbedding(parsedResponse)
-      parseEmbedding(parsedResponse)
-      return parsedResponse.output
+      return parsedResponse
     }
     throw new Error()
-  } catch {
-    console.log("failed")
+  } catch (error) {
+    console.log(error)
   }
 }
 
@@ -74,11 +68,4 @@ const parseText = (parsedResponse: any) => {
     .match(/\+([^+]+)\+/)[1]
     .trim()
   return result
-}
-
-const parseEmbedding = (parsedResponse: any) => {
-  const output: { embedding: number[]; input: string }[] = parsedResponse.output
-  const embeddings = output.map((point) => point.embedding)
-  const myrng = new seedrandom("hellow")
-  console.log(myrng)
 }
