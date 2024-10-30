@@ -8,6 +8,12 @@ export const Random = {
   },
 }
 
+export const lerp = (prev: number, next: number, percent: number) => {
+  const dist = next - prev
+  const progress = dist * percent
+  return (prev += progress)
+}
+
 export const getElementPosition = (e: HTMLElement | HTMLInputElement) => {
   const box = e.getBoundingClientRect()
   const [x, y] = [box.left, box.top]
